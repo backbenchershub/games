@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backbenchers – Fun Browser Games for Everyone</title>
+  <meta name="description" content="Play fun and interactive games like Chain Reaction and Tango on Backbenchers. More games coming soon!" />
+  <meta name="keywords" content="Backbenchers games, chain reaction game, tango game, browser games, fun online games" />
+  <meta property="og:title" content="Backbenchers – Fun Browser Games for Everyone" />
+  <meta property="og:description" content="Play fun and interactive games like Chain Reaction and Tango on Backbenchers. More games coming soon!" />
+  <meta property="og:image" content="/assets/og-preview.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://backbenchershub.com/" />
+  <link rel="canonical" href="https://backbenchershub.com/" />
+  <link rel="icon" href="/favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    html, body { min-height: 100vh; }
+    body { font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #232526 0%, #414345 100%); color: #fff; }
+    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
+    .fade-in.visible { opacity: 1; transform: none; }
+    .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+    .card-hover:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 8px 32px 0 rgba(255,221,87,0.15); }
+    .pixel-bg { background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="%23232226"/><rect x="10" y="10" width="5" height="5" fill="%23ffdd57"/><rect x="25" y="25" width="5" height="5" fill="%23ffdd57"/></svg>'); background-size: 80px 80px; }
+    .btn-cta { background: linear-gradient(90deg, #ffdd57 60%, #fff176 100%); color: #232526; font-weight: 700; border-radius: 9999px; box-shadow: 0 2px 8px #ffdd5733; transition: background 0.2s, box-shadow 0.2s; }
+    .btn-cta:hover { background: #fff176; box-shadow: 0 4px 16px #ffdd5733; }
+    .hero-gradient { background: linear-gradient(120deg, #232526 60%, #ffdd57 100%); }
+    .games-section { background: rgba(30,30,40,0.85); border-radius: 1.5rem; box-shadow: 0 4px 32px 0 rgba(0,0,0,0.12); }
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(2px); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header Include -->
+  <header id="header-placeholder"></header>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient pixel-bg flex flex-col items-center justify-center min-h-[60vh] py-16 text-center relative">
+    <h1 class="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">Backbenchers – Where Fun Begins!</h1>
+    <p class="text-lg md:text-2xl max-w-xl mx-auto mb-8 text-gray-200">Unleash your inner rebel. Play, laugh, and challenge your friends with our browser games!</p>
+    <button onclick="document.getElementById('games-section').scrollIntoView({behavior:'smooth'})" class="btn-cta px-8 py-3 text-lg mt-2 shadow-lg">Play Now</button>
+    <div class="mt-10 max-w-md mx-auto bg-black/30 rounded-xl px-6 py-4 glass border border-yellow-300/20">
+      <span class="block text-yellow-300 text-xl font-bold">"Legends are made at the back of the class!"</span>
+      <span class="block text-gray-400 mt-1">– Probably a Backbencher</span>
+    </div>
+    <div class="absolute left-0 right-0 bottom-0 h-16 bg-gradient-to-t from-gray-900/80 to-transparent pointer-events-none"></div>
+  </section>
+
+    <!-- Games Section -->
+  <section id="games-section" class="games-section max-w-6xl mx-auto mt-[-3rem] mb-12 px-4 py-12 relative z-10 shadow-xl fade-in">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-yellow-300">Our Games Collection 🎮</h2>
+    <div class="flex justify-end mb-4">
+      <select id="gamesPerPage" class="bg-gray-800 text-yellow-300 border border-yellow-300 rounded px-3 py-1">
+        <option value="8">8 games per page</option>
+        <option value="10" selected>10 games per page</option>
+        <option value="12">12 games per page</option>
+        <option value="16">16 games per page</option>
+      </select>
+    </div>
+    <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <!-- Game Card: Chain Reaction -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">💥</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Chain Reaction</h3>
+        <p class="text-gray-300 text-center mb-4">Strategize and trigger colorful chain explosions!</p>
+        <a href="games/chain-reaction.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
+      </div>
+      <!-- Game Card: Tango -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">🎲</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Tango</h3>
+        <p class="text-gray-300 text-center mb-4">Fast moves, quick wits! Sync your steps in this puzzle showdown.</p>
+        <a href="games/tango.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
+      </div>
+      <!-- Memory Match -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">🎴</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Memory Match</h3>
+        <p class="text-gray-300 text-center mb-4">Test your memory by matching pairs of cards!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+      <!-- Word Scramble -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">📝</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Word Scramble</h3>
+        <p class="text-gray-300 text-center mb-4">Unscramble letters to find hidden words!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+      <!-- Math Challenge -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">🔢</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Math Challenge</h3>
+        <p class="text-gray-300 text-center mb-4">Quick math puzzles with increasing difficulty!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+      <!-- Color Match -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">🎨</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Color Match</h3>
+        <p class="text-gray-300 text-center mb-4">Match colors in this fast-paced reaction game!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+      <!-- Snake Classic -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">🐍</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Snake Classic</h3>
+        <p class="text-gray-300 text-center mb-4">The classic snake game with a modern twist!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+      <!-- Space Shooter -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">🚀</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Space Shooter</h3>
+        <p class="text-gray-300 text-center mb-4">Defend Earth from alien invasion!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+      <!-- Puzzle Master -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">🧩</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Puzzle Master</h3>
+        <p class="text-gray-300 text-center mb-4">Solve sliding puzzles with increasing complexity!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+      <!-- Music Rhythm -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">🎵</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Music Rhythm</h3>
+        <p class="text-gray-300 text-center mb-4">Follow the beat in this musical challenge!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+      <!-- Speed Typer -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">⌨️</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Speed Typer</h3>
+        <p class="text-gray-300 text-center mb-4">Test and improve your typing speed!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+      <!-- Mini Chess -->
+      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+        <div class="text-5xl mb-4">♟️</div>
+        <h3 class="text-xl font-bold text-yellow-200 mb-2">Mini Chess</h3>
+        <p class="text-gray-300 text-center mb-4">Chess with simplified rules and quick matches!</p>
+        <span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>
+      </div>
+    </div>
+    <!-- Pagination Controls -->
+    <div class="flex justify-center items-center space-x-4 mt-8">
+      <button id="prevPage" class="btn-cta px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+      <span id="pageInfo" class="text-yellow-300"></span>
+      <button id="nextPage" class="btn-cta px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+    </div>
+  </section>  <!-- Footer Include -->
+  <footer id="footer-placeholder"></footer>
+
+  <script>
+    // Game cards data
+    const gameCards = [
+      {
+        emoji: '💥',
+        title: 'Chain Reaction',
+        description: 'Strategize and trigger colorful chain explosions!',
+        href: 'games/chain-reaction.html',
+        available: true
+      },
+      {
+        emoji: '🎲',
+        title: 'Tango',
+        description: 'Fast moves, quick wits! Sync your steps in this puzzle showdown.',
+        href: 'games/tango.html',
+        available: true
+      },
+      {
+        emoji: '🎴',
+        title: 'Memory Match',
+        description: 'Test your memory by matching pairs of cards!',
+        available: false
+      },
+      {
+        emoji: '📝',
+        title: 'Word Scramble',
+        description: 'Unscramble letters to find hidden words!',
+        available: false
+      },
+      {
+        emoji: '🔢',
+        title: 'Math Challenge',
+        description: 'Quick math puzzles with increasing difficulty!',
+        available: false
+      },
+      {
+        emoji: '🎨',
+        title: 'Color Match',
+        description: 'Match colors in this fast-paced reaction game!',
+        available: false
+      },
+      {
+        emoji: '🐍',
+        title: 'Snake Classic',
+        description: 'The classic snake game with a modern twist!',
+        available: false
+      },
+      {
+        emoji: '🚀',
+        title: 'Space Shooter',
+        description: 'Defend Earth from alien invasion!',
+        available: false
+      },
+      {
+        emoji: '🧩',
+        title: 'Puzzle Master',
+        description: 'Solve sliding puzzles with increasing complexity!',
+        available: false
+      },
+      {
+        emoji: '🎵',
+        title: 'Music Rhythm',
+        description: 'Follow the beat in this musical challenge!',
+        available: false
+      },
+      {
+        emoji: '⌨️',
+        title: 'Speed Typer',
+        description: 'Test and improve your typing speed!',
+        available: false
+      },
+      {
+        emoji: '♟️',
+        title: 'Mini Chess',
+        description: 'Chess with simplified rules and quick matches!',
+        available: false
+      }
+    ];
+
+    let currentPage = 1;
+    let gamesPerPage = 10;
+
+    function createGameCard(game) {
+      return `
+        <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
+          <div class="text-5xl mb-4">${game.emoji}</div>
+          <h3 class="text-xl font-bold text-yellow-200 mb-2">${game.title}</h3>
+          <p class="text-gray-300 text-center mb-4">${game.description}</p>
+          ${game.available 
+            ? `<a href="${game.href}" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>`
+            : `<span class="btn-cta px-6 py-2 text-base mt-auto opacity-50 cursor-not-allowed">Coming Soon</span>`
+          }
+        </div>
+      `;
+    }
+
+    function updateGames() {
+      const startIndex = (currentPage - 1) * gamesPerPage;
+      const endIndex = startIndex + gamesPerPage;
+      const totalPages = Math.ceil(gameCards.length / gamesPerPage);
+      
+      // Update grid
+      const gamesGrid = document.getElementById('gamesGrid');
+      gamesGrid.innerHTML = gameCards
+        .slice(startIndex, endIndex)
+        .map(createGameCard)
+        .join('');
+      
+      // Update pagination controls
+      document.getElementById('prevPage').disabled = currentPage === 1;
+      document.getElementById('nextPage').disabled = currentPage === totalPages;
+      document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+    }
+
+    // Fade-in animation for games section
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () {
+        document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+      }, 200);
+
+      // Header/Footer includes
+      fetch('header.html').then(r => r.text()).then(d => { document.getElementById('header-placeholder').innerHTML = d; });
+      fetch('footer.html').then(r => r.text()).then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+
+      // Initialize games grid and pagination
+      updateGames();
+
+      // Event listeners for pagination
+      document.getElementById('prevPage').addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          updateGames();
+        }
+      });
+
+      document.getElementById('nextPage').addEventListener('click', () => {
+        const totalPages = Math.ceil(gameCards.length / gamesPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          updateGames();
+        }
+      });
+
+      // Event listener for games per page dropdown
+      document.getElementById('gamesPerPage').addEventListener('change', (e) => {
+        gamesPerPage = parseInt(e.target.value);
+        currentPage = 1;
+        updateGames();
+      });
+    });
+  </script>
+</body>
+
+</html>

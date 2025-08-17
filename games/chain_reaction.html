@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chain Reaction Game - Multi Player</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      background: linear-gradient(to right, #434343, #000000);
+      color: white;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-top: 64px; /* for fixed header */
+    }
+
+    h2 {
+      margin: 20px 0 10px;
+      text-align: center;
+    }
+
+    /* Responsive grid container */
+    #game {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      max-width: 420px;
+      margin: 0 auto;
+      user-select: none;
+    }
+
+    /* Each cell adjusts for screen size */
+    .cell {
+      aspect-ratio: 1 / 1;
+      background-color: #ddd;
+      border-radius: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background-color 0.3s ease;
+    }
+
+    .cell:hover {
+      background-color: #ccc;
+    }
+
+    .orbs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      justify-content: center;
+      align-items: center;
+      max-width: 60%;
+    }
+
+    .orb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    }
+
+    footer {
+      margin-top: auto;
+      background-color: #111;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    /* Smaller screens adjustments */
+    @media (max-width: 576px) {
+      #game {
+        max-width: 100%;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 4px;
+      }
+      .orb {
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+  </style>
+</head>
+<body class="flex flex-col min-h-screen overflow-x-hidden">
+
+  <!-- Header Placeholder -->
+  <div id="header-placeholder"></div>
+
+  <!-- Main Content -->
+  <div class="container my-4">
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 col-sm-6 col-md-4">
+        <label for="playerCount" class="form-label">Select Number of Players:</label>
+        <select id="playerCount" class="form-select">
+          <option value="2">2 Players</option>
+          <option value="3">3 Players</option>
+          <option value="4">4 Players</option>
+          <option value="5">5 Players</option>
+          <option value="6">6 Players</option>
+        </select>
+      </div>
+    </div>
+
+    <h2 id="status" class="mb-4 text-center text-xl md:text-2xl">
+      Current Player: <span id="currentPlayerName" class="font-bold" style="color:red">Red</span>
+    </h2>
+
+    <div id="game" aria-label="Chain Reaction Game Board" role="grid" tabindex="0"></div>
+  </div>
+
+  <!-- Footer Placeholder -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Load header and footer dynamically
+   fetch('../partials/header.html')
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById('header-placeholder').innerHTML = data;
+
+    const menuBtn = document.getElementById('menuBtn');
+    const closeDrawer = document.getElementById('closeDrawer');
+    const drawer = document.getElementById('drawer');
+
+    if (menuBtn && closeDrawer && drawer) {
+      menuBtn.addEventListener('click', () => drawer.classList.remove('-translate-x-full'));
+      closeDrawer.addEventListener('click', () => drawer.classList.add('-translate-x-full'));
+    }
+  });
+
+    fetch('../partials/footer.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+      });
+
+    // Game logic variables and elements
+    const ROWS = 6, COLS = 6;
+    const colorMap = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
+    const gameBoard = document.getElementById("game");
+    const currentPlayerName = document.getElementById("currentPlayerName");
+    const playerCountSelect = document.getElementById("playerCount");
+
+    let playerCount = 2;
+    let currentPlayerIndex = 0;
+    let grid = [];
+    let activePlayers = [];
+    let playerHasMoved = new Set();
+
+    function initGrid() {
+      gameBoard.innerHTML = '';
+      grid = [];
+      activePlayers = colorMap.slice(0, playerCount);
+      playerHasMoved.clear();
+      for (let r = 0; r < ROWS; r++) {
+        grid[r] = [];
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+          cell.setAttribute('role', 'gridcell');
+          cell.addEventListener("click", handleClick);
+          gameBoard.appendChild(cell);
+
+          grid[r][c] = {
+            count: 0,
+            owner: null,
+            el: cell
+          };
+          renderCell(r, c);
+        }
+      }
+    }
+
+    function handleClick(e) {
+      if (activePlayers.length <= 1) return;
+      const r = parseInt(e.currentTarget.dataset.row);
+      const c = parseInt(e.currentTarget.dataset.col);
+      const cell = grid[r][c];
+      const player = activePlayers[currentPlayerIndex];
+
+      if (!player || (cell.owner && cell.owner !== player)) return;
+
+      addOrb(r, c, player);
+      playerHasMoved.add(player);
+      eliminatePlayers();
+      checkWinner();
+
+      updateCurrentPlayer();
+    }
+
+    function updateCurrentPlayer() {
+      if (activePlayers.length <= 1) return;
+      currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.length;
+      const nextPlayer = activePlayers[currentPlayerIndex];
+      currentPlayerName.textContent = capitalize(nextPlayer);
+      currentPlayerName.style.color = nextPlayer;
+    }
+
+    function eliminatePlayers() {
+      activePlayers = activePlayers.filter(p => {
+        if (!playerHasMoved.has(p)) return true;
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            if (grid[r][c].owner === p) return true;
+          }
+        }
+        return false;
+      });
+      if (currentPlayerIndex >= activePlayers.length) {
+        currentPlayerIndex = 0;
+      }
+    }
+
+    function addOrb(r, c, player) {
+      const cell = grid[r][c];
+      cell.count++;
+      cell.owner = player;
+      renderCell(r, c);
+
+      const max = getCriticalMass(r, c);
+      if (cell.count >= max) {
+        explode(r, c, player);
+      }
+    }
+
+    function explode(r, c, player) {
+      const cell = grid[r][c];
+      cell.count = 0;
+      cell.owner = null;
+      renderCell(r, c);
+
+      const dirs = [[0,1], [1,0], [0,-1], [-1,0]];
+      for (let [dr, dc] of dirs) {
+        const nr = r + dr;
+        const nc = c + dc;
+        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+          addOrb(nr, nc, player);
+        }
+      }
+    }
+
+    function getCriticalMass(r, c) {
+      if ((r === 0 || r === ROWS - 1) && (c === 0 || c === COLS - 1)) return 2;
+      if (r === 0 || r === ROWS - 1 || c === 0 || c === COLS - 1) return 3;
+      return 4;
+    }
+
+    function renderCell(r, c) {
+      const { count, owner, el } = grid[r][c];
+      el.className = "cell";
+      el.style.backgroundColor = "#ddd";
+      el.innerHTML = "";
+      if (!owner || count === 0) return;
+
+      const orbs = document.createElement("div");
+      orbs.className = "orbs";
+
+      for (let i = 0; i < count; i++) {
+        const orb = document.createElement("div");
+        orb.className = "orb";
+        orb.style.backgroundColor = owner;
+        orbs.appendChild(orb);
+      }
+
+      el.appendChild(orbs);
+    }
+
+    function checkWinner() {
+      if (activePlayers.length === 1) {
+        setTimeout(() => {
+          alert(`${capitalize(activePlayers[0])} wins!`);
+          location.reload();
+        }, 100);
+      }
+    }
+
+    function capitalize(s) {
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    playerCountSelect.addEventListener('change', () => {
+      playerCount = parseInt(playerCountSelect.value);
+      currentPlayerIndex = 0;
+      initGrid();
+      currentPlayerName.textContent = capitalize(colorMap[currentPlayerIndex]);
+      currentPlayerName.style.color = colorMap[currentPlayerIndex];
+    });
+
+    // Initialize grid and current player
+    initGrid();
+
+    function loadWithScripts(url, targetId) {
+      fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const wrapper = document.createElement('div');
+          wrapper.innerHTML = html;
+
+          // Execute scripts
+          const scripts = wrapper.querySelectorAll("script");
+          scripts.forEach(oldScript => {
+            const newScript = document.createElement("script");
+            if (oldScript.src) {
+              newScript.src = oldScript.src;
+            } else {
+              newScript.textContent = oldScript.textContent;
+            }
+            document.body.appendChild(newScript);
+          });
+
+          document.getElementById(targetId).innerHTML = wrapper.innerHTML;
+        });
+    }
+
+    loadWithScripts('../partials/header.html', 'header-placeholder');
+    loadWithScripts('../partials/footer.html', 'footer-placeholder');
+  </script>
+</body>
+</html>

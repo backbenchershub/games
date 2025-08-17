@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us - Backbenchers Hub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(to right, #141e30, #243b55);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      padding: 60px 20px;
+      max-width: 900px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <div class="container">
+    <h2 class="text-center mb-4">About Backbenchers Hub</h2>
+    <p>
+      Welcome to <strong>Backbenchers Hub</strong> — the digital corner for rebels, creatives, and the silently genius minds who always chose the last bench in class. We’re not just a site; we’re a movement.
+    </p>
+    <p>
+      Our goal is to build a space where backbenchers can share stories, play games, and showcase creativity without fear of judgment. Whether you're into storytelling or quick distraction-filled games, this is your playground.
+    </p>
+    <p>
+      We believe backbenchers have always been the unspoken visionaries. Join us in celebrating fun, wit, and imagination!
+    </p>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    fetch('header.html').then(res => res.text()).then(data => {
+      document.getElementById('header-placeholder').innerHTML = data;
+    });
+
+    fetch('footer.html').then(res => res.text()).then(data => {
+      document.getElementById('footer-placeholder').innerHTML = data;
+    });
+  </script>
+
+</body>
+</html>
