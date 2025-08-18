@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Word Guess - Hangman Style</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'VT323', monospace;
+      background-color: #121212;
+      color: #f8f8f2;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .game-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      text-align: center;
+    }
+
+    .word-display {
+      font-size: 2rem;
+      letter-spacing: 0.5rem;
+      margin: 2rem 0;
+    }
+
+    .letters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .letter {
+      width: 40px;
+      height: 40px;
+      background-color: #282828;
+      border: 2px solid #ffcc00;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .letter:hover:not(.used) {
+      background-color: #333;
+      transform: scale(1.1);
+    }
+
+    .letter.used {
+      background-color: #555;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .letter.correct {
+      background-color: #4caf50;
+      border-color: #4caf50;
+    }
+
+    .letter.wrong {
+      background-color: #f44336;
+      border-color: #f44336;
+    }
+
+    .hangman {
+      font-size: 4rem;
+      margin: 1rem 0;
+    }
+
+    .controls {
+      margin: 2rem 0;
+    }
+
+    .btn {
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      background-color: #ffcc00;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #ffdd57;
+      transform: translateY(-2px);
+    }
+
+    .game-info {
+      display: flex;
+      justify-content: space-around;
+      margin: 1rem 0;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header id="header-placeholder"></header>
+
+  <div class="game-container">
+    <h1 class="text-4xl font-bold mb-8 text-center text-yellow-300">🎯 Word Guess</h1>
+    
+    <div class="hangman" id="hangman">😊</div>
+    
+    <div class="word-display" id="wordDisplay"></div>
+    
+    <div class="game-info">
+      <div>Guesses Left: <span id="guessesLeft" class="text-yellow-300">6</span></div>
+      <div>Wins: <span id="wins" class="text-green-300">0</span></div>
+    </div>
+    
+    <div class="letters" id="letters"></div>
+    
+    <div class="controls">
+      <button id="newGameButton" class="btn">🎮 New Game</button>
+    </div>
+  </div>
+
+  <footer id="footer-placeholder"></footer>
+
+  <script>
+    const words = [
+      'JAVASCRIPT', 'PROGRAMMING', 'COMPUTER', 'GAME', 'PUZZLE',
+      'CHALLENGE', 'VICTORY', 'NEON', 'RETRO', 'CLASSIC',
+      'MEMORY', 'SKILL', 'BRAIN', 'THINK', 'SOLVE'
+    ];
+
+    let currentWord = '';
+    let guessedLetters = [];
+    let wrongGuesses = 0;
+    let maxWrongGuesses = 6;
+    let wins = 0;
+
+    const wordDisplay = document.getElementById('wordDisplay');
+    const lettersContainer = document.getElementById('letters');
+    const guessesLeftElement = document.getElementById('guessesLeft');
+    const winsElement = document.getElementById('wins');
+    const newGameButton = document.getElementById('newGameButton');
+    const hangmanElement = document.getElementById('hangman');
+
+    const hangmanStages = ['😊', '😐', '😕', '😟', '😨', '😰', '💀'];
+
+    function initGame() {
+      currentWord = words[Math.floor(Math.random() * words.length)];
+      guessedLetters = [];
+      wrongGuesses = 0;
+      
+      updateDisplay();
+      createLetters();
+      updateHangman();
+    }
+
+    function updateDisplay() {
+      wordDisplay.textContent = currentWord
+        .split('')
+        .map(letter => guessedLetters.includes(letter) ? letter : '_')
+        .join(' ');
+      
+      guessesLeftElement.textContent = maxWrongGuesses - wrongGuesses;
+    }
+
+    function createLetters() {
+      lettersContainer.innerHTML = '';
+      for (let i = 65; i <= 90; i++) {
+        const letter = String.fromCharCode(i);
+        const letterElement = document.createElement('div');
+        letterElement.classList.add('letter');
+        letterElement.textContent = letter;
+        letterElement.dataset.letter = letter;
+        
+        if (guessedLetters.includes(letter)) {
+          letterElement.classList.add('used');
+          if (currentWord.includes(letter)) {
+            letterElement.classList.add('correct');
+          } else {
+            letterElement.classList.add('wrong');
+          }
+        }
+        
+        letterElement.addEventListener('click', () => guessLetter(letter));
+        lettersContainer.appendChild(letterElement);
+      }
+    }
+
+    function guessLetter(letter) {
+      if (guessedLetters.includes(letter)) return;
+      
+      guessedLetters.push(letter);
+      
+      if (currentWord.includes(letter)) {
+        // Correct guess
+        updateDisplay();
+        if (!wordDisplay.textContent.includes('_')) {
+          wins++;
+          winsElement.textContent = wins;
+          setTimeout(() => alert('You won! 🎉'), 100);
+        }
+      } else {
+        // Wrong guess
+        wrongGuesses++;
+        updateHangman();
+        if (wrongGuesses >= maxWrongGuesses) {
+          setTimeout(() => alert(`Game Over! The word was: ${currentWord}`), 100);
+        }
+      }
+      
+      createLetters();
+    }
+
+    function updateHangman() {
+      hangmanElement.textContent = hangmanStages[wrongGuesses];
+    }
+
+    newGameButton.addEventListener('click', initGame);
+
+    initGame();
+  </script>
+</body>
+</html>

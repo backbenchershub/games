@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sudoku - Neon Edition</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'VT323', monospace;
+      background-color: #121212;
+      color: #f8f8f2;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .game-container {
+      margin: 2rem auto;
+      text-align: center;
+    }
+
+    .sudoku-board {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 1px;
+      background-color: #333;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 2rem auto;
+      width: fit-content;
+    }
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      background-color: #282828;
+      border: 1px solid #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .cell:hover {
+      background-color: #333;
+    }
+
+    .controls {
+      margin: 2rem 0;
+    }
+
+    .btn {
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      background-color: #ffcc00;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #ffdd57;
+      transform: translateY(-2px);
+    }
+
+    .game-info {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header id="header-placeholder"></header>
+
+  <div class="game-container">
+    <h1 class="text-4xl font-bold mb-8 text-center text-yellow-300">🧩 Sudoku</h1>
+    
+    <div class="game-info">Fill in the grid with numbers 1-9</div>
+    
+    <div class="sudoku-board" id="sudokuBoard"></div>
+    
+    <div class="controls">
+      <button id="newGameButton" class="btn">🎮 New Game</button>
+    </div>
+  </div>
+
+  <footer id="footer-placeholder"></footer>
+
+  <script>
+    const boardSize = 9;
+    let board = [];
+
+    function initGame() {
+      board = Array.from({ length: boardSize }, () => Array(boardSize).fill(0));
+      createBoard();
+      generateSudoku();
+      updateDisplay();
+    }
+
+    function createBoard() {
+      const sudokuBoard = document.getElementById('sudokuBoard');
+      sudokuBoard.innerHTML = '';
+      for (let y = 0; y < boardSize; y++) {
+        for (let x = 0; x < boardSize; x++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          cell.dataset.x = x;
+          cell.dataset.y = y;
+          cell.addEventListener('click', () => handleCellClick(x, y));
+          sudokuBoard.appendChild(cell);
+        }
+      }
+    }
+
+    function handleCellClick(x, y) {
+      const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+      const currentValue = board[y][x];
+      const newValue = currentValue < 9 ? currentValue + 1 : 0;
+      board[y][x] = newValue;
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const cells = document.querySelectorAll('.cell');
+      cells.forEach(cell => {
+        const x = parseInt(cell.dataset.x);
+        const y = parseInt(cell.dataset.y);
+        cell.textContent = board[y][x] || '';
+      });
+    }
+
+    function generateSudoku() {
+      // Simple Sudoku generation logic (for demonstration purposes)
+      for (let i = 0; i < 17; i++) {
+        const x = Math.floor(Math.random() * boardSize);
+        const y = Math.floor(Math.random() * boardSize);
+        board[y][x] = Math.floor(Math.random() * 9) + 1;
+      }
+    }
+
+    document.getElementById('newGameButton').addEventListener('click', initGame);
+
+    initGame();
+  </script>
+</body>
+</html>

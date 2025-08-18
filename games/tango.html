@@ -111,9 +111,6 @@
 </head>
 <body>
 
-  <!-- Header Include -->
-  <header id="header-placeholder"></header>
-
   <div class="game-container">
     <h1 class="text-4xl font-bold mb-8 text-center text-yellow-300">🎲 Tango Puzzle</h1>
 
@@ -165,11 +162,8 @@
     </div>
   </div>
 
-  <!-- Footer Include -->
-  <footer id="footer-placeholder"></footer>
-
   <script>
-    // Game logic remains the same, adding help modal functionality
+    // Game logic
     const helpModal = document.getElementById('helpModal');
 
     function showHelp() {
@@ -179,16 +173,6 @@
     function closeHelp() {
       helpModal.style.display = 'none';
     }
-
-    // Load header and footer
-    document.addEventListener('DOMContentLoaded', () => {
-      fetch('/header.html').then(r => r.text()).then(html => {
-        document.getElementById('header-placeholder').innerHTML = html;
-      });
-      fetch('/footer.html').then(r => r.text()).then(html => {
-        document.getElementById('footer-placeholder').innerHTML = html;
-      });
-    });
 
     // Rest of your existing game logic here...
     // [Previous game logic code remains unchanged]

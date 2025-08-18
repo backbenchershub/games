@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simon Says - Memory Game</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'VT323', monospace;
+      background-color: #121212;
+      color: #f8f8f2;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .game-container {
+      margin: 2rem auto;
+      text-align: center;
+    }
+
+    .simon-board {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      width: 300px;
+      height: 300px;
+      margin: 2rem auto;
+    }
+
+    .simon-button {
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 3px solid transparent;
+    }
+
+    .simon-button:hover {
+      transform: scale(1.05);
+    }
+
+    .simon-button.active {
+      transform: scale(1.1);
+      border-color: #fff;
+    }
+
+    .red { background-color: #ff4444; }
+    .blue { background-color: #4444ff; }
+    .green { background-color: #44ff44; }
+    .yellow { background-color: #ffff44; }
+
+    .red.active { background-color: #ff8888; }
+    .blue.active { background-color: #8888ff; }
+    .green.active { background-color: #88ff88; }
+    .yellow.active { background-color: #ffff88; }
+
+    .controls {
+      margin: 2rem 0;
+    }
+
+    .btn {
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      background-color: #ffcc00;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #ffdd57;
+      transform: translateY(-2px);
+    }
+
+    .game-info {
+      font-size: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .level {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header id="header-placeholder"></header>
+
+  <div class="game-container">
+    <h1 class="text-4xl font-bold mb-8 text-center text-yellow-300">🎵 Simon Says</h1>
+    
+    <div class="level">Level: <span id="level">1</span></div>
+    
+    <div class="simon-board">
+      <div class="simon-button red" data-color="red"></div>
+      <div class="simon-button blue" data-color="blue"></div>
+      <div class="simon-button green" data-color="green"></div>
+      <div class="simon-button yellow" data-color="yellow"></div>
+    </div>
+    
+    <div class="game-info">
+      <div>Watch the sequence, then repeat it!</div>
+    </div>
+    
+    <div class="controls">
+      <button id="startButton" class="btn">▶️ Start Game</button>
+      <button id="resetButton" class="btn">🔄 Reset</button>
+    </div>
+  </div>
+
+  <footer id="footer-placeholder"></footer>
+
+  <script>
+    const colors = ['red', 'blue', 'green', 'yellow'];
+    const buttons = document.querySelectorAll('.simon-button');
+    const levelElement = document.getElementById('level');
+    const startButton = document.getElementById('startButton');
+    const resetButton = document.getElementById('resetButton');
+
+    let sequence = [];
+    let playerSequence = [];
+    let level = 1;
+    let isPlaying = false;
+    let isShowingSequence = false;
+
+    function initGame() {
+      sequence = [];
+      playerSequence = [];
+      level = 1;
+      levelElement.textContent = level;
+      isPlaying = false;
+      isShowingSequence = false;
+    }
+
+    function startGame() {
+      if (!isPlaying) {
+        initGame();
+        isPlaying = true;
+        nextLevel();
+      }
+    }
+
+    function nextLevel() {
+      playerSequence = [];
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      sequence.push(randomColor);
+      levelElement.textContent = level;
+      
+      setTimeout(() => {
+        showSequence();
+      }, 1000);
+    }
+
+    function showSequence() {
+      isShowingSequence = true;
+      let i = 0;
+      
+      const interval = setInterval(() => {
+        if (i < sequence.length) {
+          const color = sequence[i];
+          const button = document.querySelector(`[data-color="${color}"]`);
+          
+          button.classList.add('active');
+          playSound(color);
+          
+          setTimeout(() => {
+            button.classList.remove('active');
+          }, 500);
+          
+          i++;
+        } else {
+          clearInterval(interval);
+          isShowingSequence = false;
+        }
+      }, 800);
+    }
+
+    function playSound(color) {
+      // Create simple beep sounds using Web Audio API
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      const frequencies = {
+        red: 261.63,    // C4
+        blue: 329.63,   // E4
+        green: 392.00,  // G4
+        yellow: 523.25  // C5
+      };
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = frequencies[color];
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    }
+
+    function handleButtonClick(color) {
+      if (!isPlaying || isShowingSequence) return;
+      
+      const button = document.querySelector(`[data-color="${color}"]`);
+      button.classList.add('active');
+      playSound(color);
+      
+      setTimeout(() => {
+        button.classList.remove('active');
+      }, 200);
+      
+      playerSequence.push(color);
+      
+      if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
+        // Wrong sequence
+        isPlaying = false;
+        alert(`Game Over! You reached level ${level}`);
+        return;
+      }
+      
+      if (playerSequence.length === sequence.length) {
+        // Correct sequence
+        level++;
+        setTimeout(() => {
+          nextLevel();
+        }, 1000);
+      }
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const color = button.dataset.color;
+        handleButtonClick(color);
+      });
+    });
+
+    startButton.addEventListener('click', startGame);
+    resetButton.addEventListener('click', initGame);
+
+    initGame();
+  </script>
+</body>
+</html>

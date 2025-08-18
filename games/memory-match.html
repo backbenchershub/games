@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Memory Match - Card Matching Game</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'VT323', monospace;
+      background-color: #121212;
+      color: #f8f8f2;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 64px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      background-color: #ffcc00;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #ffdd57;
+      transform: translateY(-2px);
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .card {
+      width: 100px;
+      height: 100px;
+      background-color: #1e1e1e;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 2rem;
+      position: relative;
+    }
+
+    .card:hover:not(.flipped):not(.matched) {
+      background-color: #333;
+      transform: scale(1.05);
+    }
+
+    .card.flipped {
+      background-color: #333;
+      transform: rotateY(180deg);
+    }
+
+    .card.matched {
+      background-color: #2d5016;
+      border-color: #4caf50;
+      cursor: default;
+    }
+
+    .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #1e1e1e;
+      border-radius: 6px;
+    }
+
+    .card-front {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #333;
+      border-radius: 6px;
+      transform: rotateY(180deg);
+      backface-visibility: hidden;
+    }
+
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 500px) {
+      .game-board {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+      }
+      .card {
+        width: 80px;
+        height: 80px;
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Include -->
+  <header id="header-placeholder"></header>
+
+  <div class="game-container">
+    <h1 class="text-4xl font-bold mb-8 text-center text-yellow-300">🧠 Memory Match</h1>
+
+    <div class="stats">
+      <div>Moves: <span id="moves" class="text-yellow-300">0</span></div>
+      <div>Matches: <span id="matches" class="text-green-300">0</span></div>
+      <div>Time: <span id="timer"I will proceed with creating the 10 new games following the established theme. I will start by creating the first game, **Memory Match**.
+
+### **Creating Memory Match Game**
+
+Here’s the plan for the Memory Match game:
+
+1. **File Name**: `memory-match.html`
+2. **Theme**: Dark background, neon accents, VT323 font.
+3. **Game Logic**: Card matching game where players flip cards to find pairs.
+4. **Responsive Design**: Ensure it works on both desktop and mobile.
+
+Now, I will create the `memory-match.html` file.
+
+<create_file>
+<path>games/memory-match.html</path>
+<content>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Memory Match Game</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'VT323', monospace;
+      background-color: #121212;
+      color: #f8f8f2;
+      min-height: 100vh;
+      margin: 0;
+      padding-top: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .game-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      max-width: 600px;
+      margin: 2rem auto;
+    }
+
+    .card {
+      background-color: #282828;
+      border: 2px solid #ffcc00;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      color: transparent;
+      transition: all 0.3s;
+    }
+
+    .card.flipped {
+      color: #f8f8f2;
+    }
+
+    .controls {
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      font-family: 'VT323', monospace;
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      background-color: #ffcc00;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #ffdd57;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <header id="header-placeholder"></header>
+
+  <div class="game-container" id="game"></div>
+
+  <div class="controls">
+    <button id="resetButton" class="btn">🔄 Reset</button>
+  </div>
+
+  <footer id="footer-placeholder"></footer>
+
+  <script>
+    const cards = [
+      'A', 'A', 'B', 'B', 'C', 'C', 'D', 'D',
+      'E', 'E', 'F', 'F', 'G', 'G', 'H', 'H'
+    ];
+
+    let flippedCards = [];
+    let matchedCards = [];
+    let gameContainer = document.getElementById('game');
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function createBoard() {
+      shuffle(cards).forEach(card => {
+        const cardElement = document.createElement('div');
+        cardElement.classList.add('card');
+        cardElement.dataset.cardValue = card;
+        cardElement.addEventListener('click', flipCard);
+        gameContainer.appendChild(cardElement);
+      });
+    }
+
+    function flipCard() {
+      if (flippedCards.length < 2 && !this.classList.contains('flipped')) {
+        this.classList.add('flipped');
+        this.textContent = this.dataset.cardValue;
+        flippedCards.push(this);
+
+        if (flippedCards.length === 2) {
+          setTimeout(checkMatch, 1000);
+        }
+      }
+    }
+
+    function checkMatch() {
+      const [firstCard, secondCard] = flippedCards;
+      if (firstCard.dataset.cardValue === secondCard.dataset.cardValue) {
+        matchedCards.push(firstCard, secondCard);
+        flippedCards = [];
+      } else {
+        firstCard.classList.remove('flipped');
+        secondCard.classList.remove('flipped');
+        firstCard.textContent = '';
+        secondCard.textContent = '';
+        flippedCards = [];
+      }
+    }
+
+    document.getElementById('resetButton').addEventListener('click', () => {
+      gameContainer.innerHTML = '';
+      matchedCards = [];
+      createBoard();
+    });
+
+    document.addEventListener('DOMContentLoaded', createBoard);
+  </script>
+</body>
+</html>
