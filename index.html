@@ -53,7 +53,17 @@
   <!-- Games Section -->
   <section id="games-section" class="games-section max-w-6xl mx-auto mt-[-3rem] mb-12 px-4 py-12 relative z-10 shadow-xl fade-in">
     <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-yellow-300">Our Games Collection 🎮</h2>
-    <div class="flex justify-end mb-4">
+    
+    <!-- Search Bar and Controls -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+      <div class="relative w-full md:w-64">
+        <input 
+          type="text" 
+          id="gameSearch" 
+          placeholder="🔍 Search games..." 
+          class="w-full bg-gray-800 text-yellow-300 border border-yellow-300 rounded-lg px-4 py-2 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 focus:outline-none"
+        >
+      </div>
       <select id="gamesPerPage" class="bg-gray-800 text-yellow-300 border border-yellow-300 rounded px-3 py-1">
         <option value="8">8 games per page</option>
         <option value="10" selected>10 games per page</option>
@@ -61,6 +71,7 @@
         <option value="16">16 games per page</option>
       </select>
     </div>
+    
     <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
       <!-- Game Card: Chain Reaction -->
       <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
@@ -154,6 +165,7 @@
   <script>
     // Game cards data
     const gameCards = [
+      // Available Games
       {
         emoji: '💥',
         title: 'Chain Reaction',
@@ -230,6 +242,115 @@
         description: 'Number puzzle with neon styling!',
         href: 'games/sudoku.html',
         available: true
+      },
+      
+      // Team Building Games
+      {
+        emoji: '🤝',
+        title: 'Trust Circle',
+        description: 'Build trust and communication in your team!',
+        href: 'games/trust-circle.html',
+        available: true
+      },
+      {
+        emoji: '🎯',
+        title: 'Team Quest',
+        description: 'Collaborative adventure game for groups!',
+        href: 'games/team-quest.html',
+        available: true
+      },
+      {
+        emoji: '🗣️',
+        title: 'Communication Bridge',
+        description: 'Improve team communication skills!',
+        href: 'games/communication-bridge.html',
+        available: true
+      },
+      {
+        emoji: '🧩',
+        title: 'Group Puzzle',
+        description: 'Solve complex puzzles together!',
+        href: 'games/group-puzzle.html',
+        available: true
+      },
+      {
+        emoji: '🏆',
+        title: 'Team Challenge',
+        description: 'Compete in team-based challenges!',
+        href: 'games/team-challenge.html',
+        available: true
+      },
+      
+      // Coming Soon Games
+      {
+        emoji: '🚀',
+        title: 'Space Explorer',
+        description: 'Explore the cosmos in this adventure!',
+        href: '#',
+        available: false
+      },
+      {
+        emoji: '🏎️',
+        title: 'Racing Thunder',
+        description: 'High-speed racing action!',
+        href: '#',
+        available: false
+      },
+      {
+        emoji: '⚔️',
+        title: 'Battle Arena',
+        description: 'Epic multiplayer battles await!',
+        href: '#',
+        available: false
+      },
+      {
+        emoji: '🏗️',
+        title: 'City Builder',
+        description: 'Build and manage your own city!',
+        href: '#',
+        available: false
+      },
+      {
+        emoji: '🎭',
+        title: 'Story Mode',
+        description: 'Interactive storytelling experience!',
+        href: '#',
+        available: false
+      },
+      {
+        emoji: '🎪',
+        title: 'Carnival Games',
+        description: 'Classic carnival games collection!',
+        href: '#',
+        available: false
+      },
+      {
+        emoji: '🏰',
+        title: 'Castle Defense',
+        description: 'Defend your kingdom from invaders!',
+        href: '#',
+        available: false
+      },
+      {
+        emoji: '🎨',
+        title: 'Art Studio',
+        description: 'Creative drawing and painting game!',
+        href: '#',
+        available: false
+      },
+      {
+        emoji: '🏆',
+        title: 'Tournament Mode',
+        description: 'Compete in global tournaments!',
+        href: '#',
+        available: false
+      },
+      {
+        emoji: '🌟',
+        title: 'Star Collector',
+        description: 'Collect stars in this cosmic adventure!',
+        href: '#',
+        available: false
       }
     ];
 
@@ -237,24 +358,39 @@
     let gamesPerPage = 10;
 
     function createGameCard(game) {
+      const buttonText = game.available ? 'Play Now' : 'Coming Soon';
+      const buttonClass = game.available ? 'btn-cta px-6 py-2 text-base mt-auto' : 'bg-gray-600 text-gray-300 px-6 py-2 text-base mt-auto rounded-full cursor-not-allowed';
+      const href = game.available ? game.href : '#';
+      
       return `
         <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
           <div class="text-5xl mb-4">${game.emoji}</div>
           <h3 class="text-xl font-bold text-yellow-200 mb-2">${game.title}</h3>
           <p class="text-gray-300 text-center mb-4">${game.description}</p>
-          <a href="${game.href}" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
+          <a href="${href}" class="${buttonClass}">${buttonText}</a>
         </div>
       `;
     }
 
+    // Search function
+    function filterGames(searchTerm) {
+      return gameCards.filter(game => 
+        game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        game.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
     function updateGames() {
+      const searchTerm = document.getElementById('gameSearch').value;
+      const filteredGames = searchTerm ? filterGames(searchTerm) : gameCards;
+      
       const startIndex = (currentPage - 1) * gamesPerPage;
       const endIndex = startIndex + gamesPerPage;
-      const totalPages = Math.ceil(gameCards.length / gamesPerPage);
+      const totalPages = Math.ceil(filteredGames.length / gamesPerPage);
       
       // Update grid
       const gamesGrid = document.getElementById('gamesGrid');
-      gamesGrid.innerHTML = gameCards
+      gamesGrid.innerHTML = filteredGames
         .slice(startIndex, endIndex)
         .map(createGameCard)
         .join('');
@@ -297,6 +433,12 @@
       // Event listener for games per page dropdown
       document.getElementById('gamesPerPage').addEventListener('change', (e) => {
         gamesPerPage = parseInt(e.target.value);
+        currentPage = 1;
+        updateGames();
+      });
+
+      // Add search functionality
+      document.getElementById('gameSearch').addEventListener('input', () => {
         currentPage = 1;
         updateGames();
       });

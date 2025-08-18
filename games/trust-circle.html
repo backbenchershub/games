@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trust Circle - Team Building Game</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .game-container {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 600px;
+      text-align: center;
+    }
+    .btn {
+      background: #ffdd57;
+      color: #232526;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: transform 0.2s;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1 class="text-3xl font-bold mb-4">🤝 Trust Circle</h1>
+    <p class="mb-6">A team building game focused on building trust and communication!</p>
+    <div class="mb-4">
+      <h2 class="text-xl mb-2">How to Play:</h2>
+      <ul class="text-left">
+        <li>• Form a circle with your team</li>
+        <li>• Share one personal fact</li>
+        <li>• Build connections through shared experiences</li>
+        <li>• Strengthen team bonds</li>
+      </ul>
+    </div>
+    <button class="btn" onclick="startGame()">Start Trust Building</button>
+    <button class="btn" onclick="window.location.href='../index.html'">Back to Games</button>
+  </div>
+
+  <script>
+    function startGame() {
+      alert('Trust Circle game starting! Gather your team and begin sharing.');
+    }
+  </script>
+</body>
+</html>

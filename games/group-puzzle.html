@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Puzzle - Backbenchers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Orbitron', sans-serif; 
+            background: linear-gradient(135deg, #232526 0%, #414345 100%); 
+        }
+        .puzzle-piece {
+            -webkit-user-select: none;
+            user-select: none;
+            cursor: grab;
+            transition: transform 0.2s;
+        }
+        .puzzle-piece:active {
+            cursor: grabbing;
+        }
+        .puzzle-piece.correct {
+            border: 2px solid #22c55e;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-yellow-300">Group Puzzle</h1>
+            <div class="flex gap-4">
+                <button id="howToPlay" class="px-6 py-2 bg-gray-700 text-white rounded-full font-bold hover:bg-gray-600">How to Play</button>
+                <button id="newGame" class="px-6 py-2 bg-yellow-400 text-gray-900 rounded-full font-bold hover:bg-yellow-300">New Game</button>
+                <a href="../index.html" class="px-6 py-2 bg-gray-700 text-white rounded-full font-bold hover:bg-gray-600">Back to Games</a>
+            </div>
+        </div>
+
+        <!-- How to Play Modal -->
+        <div id="howToPlayModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-gray-800 rounded-lg p-8 max-w-2xl mx-4">
+                <h2 class="text-2xl font-bold text-yellow-300 mb-4">How to Play Group Puzzle</h2>
+                <div class="space-y-4 text-gray-300">
+                    <p><span class="text-yellow-200 font-bold">Game Objective:</span></p>
+                    <ul class="list-disc list-inside ml-4 space-y-2">
+                        <li>Work together to arrange the numbers from 1 to 9 in order</li>
+                        <li>Numbers should be arranged from left to right, top to bottom</li>
+                    </ul>
+                    <p><span class="text-yellow-200 font-bold">How to Move:</span></p>
+                    <ul class="list-disc list-inside ml-4 space-y-2">
+                        <li>Click and drag pieces to swap their positions</li>
+                        <li>Work with other players to decide the best moves</li>
+                        <li>Try to complete the puzzle in as few moves as possible</li>
+                    </ul>
+                    <p><span class="text-yellow-200 font-bold">Tips:</span></p>
+                    <ul class="list-disc list-inside ml-4 space-y-2">
+                        <li>Focus on getting one row correct at a time</li>
+                        <li>Communicate with your team about your next moves</li>
+                        <li>Watch the timer and try to improve your speed</li>
+                    </ul>
+                </div>
+                <button id="closeHowToPlay" class="mt-6 px-6 py-2 bg-yellow-400 text-gray-900 rounded-full font-bold hover:bg-yellow-300">Got it!</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Game Board -->
+            <div class="bg-gray-800/80 rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-yellow-200 mb-4">Puzzle Board</h2>
+                <div id="puzzleBoard" class="grid grid-cols-3 gap-2 bg-gray-700 p-4 rounded-lg aspect-square">
+                    <!-- Puzzle pieces will be generated here -->
+                </div>
+            </div>
+
+            <!-- Game Info -->
+            <div class="bg-gray-800/80 rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-yellow-200 mb-4">Game Info</h2>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-gray-400 mb-2">Time Elapsed</p>
+                        <p id="timer" class="text-4xl font-bold text-yellow-300">00:00</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 mb-2">Moves Made</p>
+                        <p id="moves" class="text-4xl font-bold text-white">0</p>
+                    </div>
+                    <div class="mt-8">
+                        <h3 class="text-xl font-bold text-yellow-200 mb-4">Players Online</h3>
+                        <div id="players" class="space-y-2">
+                            <div class="bg-gray-700 rounded p-2 flex items-center">
+                                <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                                Player 1 (You)
+                            </div>
+                            <!-- More players will be simulated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let moves = 0;
+        let timerInterval;
+        let startTime;
+        let pieces = [];
+        
+        function createPuzzle() {
+            const board = document.getElementById('puzzleBoard');
+            board.innerHTML = '';
+            pieces = [];
+            
+            // Create puzzle pieces
+            for (let i = 0; i < 9; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'puzzle-piece bg-yellow-400 aspect-square rounded flex items-center justify-center text-2xl font-bold text-gray-900';
+                piece.textContent = i + 1;
+                piece.draggable = true;
+                piece.dataset.value = i + 1;
+                
+                piece.addEventListener('dragstart', handleDragStart);
+                piece.addEventListener('dragover', handleDragOver);
+                piece.addEventListener('drop', handleDrop);
+                
+                pieces.push(piece);
+            }
+            
+            // Shuffle pieces
+            pieces.sort(() => Math.random() - 0.5);
+            pieces.forEach(piece => board.appendChild(piece));
+        }
+        
+        function handleDragStart(e) {
+            e.dataTransfer.setData('text/plain', e.target.dataset.value);
+            e.target.classList.add('opacity-50');
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            const draggedValue = e.dataTransfer.getData('text/plain');
+            const draggedElement = document.querySelector(`[data-value="${draggedValue}"]`);
+            const dropTarget = e.target.closest('.puzzle-piece');
+            
+            if (dropTarget && draggedElement !== dropTarget) {
+                const tempValue = dropTarget.dataset.value;
+                const tempText = dropTarget.textContent;
+                
+                dropTarget.dataset.value = draggedValue;
+                dropTarget.textContent = draggedValue;
+                
+                draggedElement.dataset.value = tempValue;
+                draggedElement.textContent = tempText;
+                
+                moves++;
+                document.getElementById('moves').textContent = moves;
+                
+                checkWinCondition();
+            }
+            
+            document.querySelectorAll('.puzzle-piece').forEach(piece => {
+                piece.classList.remove('opacity-50');
+            });
+        }
+        
+        function checkWinCondition() {
+            const currentOrder = Array.from(document.querySelectorAll('.puzzle-piece'))
+                .map(piece => parseInt(piece.dataset.value));
+            
+            const isCorrect = currentOrder.every((value, index) => value === index + 1);
+            
+            if (isCorrect) {
+                clearInterval(timerInterval);
+                setTimeout(() => {
+                    alert('Congratulations! Puzzle solved!');
+                    if (confirm('Start new game?')) {
+                        startNewGame();
+                    }
+                }, 500);
+            }
+        }
+        
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+                const seconds = (elapsed % 60).toString().padStart(2, '0');
+                document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+            }, 1000);
+        }
+        
+        function startNewGame() {
+            moves = 0;
+            document.getElementById('moves').textContent = '0';
+            document.getElementById('timer').textContent = '00:00';
+            clearInterval(timerInterval);
+            startTimer();
+            createPuzzle();
+            simulatePlayers();
+        }
+        
+        function simulatePlayers() {
+            const players = document.getElementById('players');
+            players.innerHTML = `
+                <div class="bg-gray-700 rounded p-2 flex items-center">
+                    <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                    Player 1 (You)
+                </div>
+            `;
+            
+            // Simulate other players joining/leaving
+            setInterval(() => {
+                const numPlayers = Math.floor(Math.random() * 3) + 2; // 2-4 other players
+                while (players.children.length < numPlayers) {
+                    const playerDiv = document.createElement('div');
+                    playerDiv.className = 'bg-gray-700 rounded p-2 flex items-center';
+                    playerDiv.innerHTML = `
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                        Player ${players.children.length + 1}
+                    `;
+                    players.appendChild(playerDiv);
+                }
+            }, 5000);
+        }
+        
+        // How to Play Modal
+        const howToPlayBtn = document.getElementById('howToPlay');
+        const howToPlayModal = document.getElementById('howToPlayModal');
+        const closeHowToPlay = document.getElementById('closeHowToPlay');
+
+        howToPlayBtn.addEventListener('click', () => {
+            howToPlayModal.classList.remove('hidden');
+        });
+
+        closeHowToPlay.addEventListener('click', () => {
+            howToPlayModal.classList.add('hidden');
+        });
+
+        howToPlayModal.addEventListener('click', (e) => {
+            if (e.target === howToPlayModal) {
+                howToPlayModal.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('newGame').addEventListener('click', startNewGame);
+        window.addEventListener('load', startNewGame);
+    </script>
+</body>
+</html>

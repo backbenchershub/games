@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Quest - Backbenchers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Orbitron', sans-serif; 
+            background: linear-gradient(135deg, #232526 0%, #414345 100%); 
+        }
+        .quest-card {
+            transition: transform 0.3s;
+        }
+        .quest-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-yellow-300">Team Quest</h1>
+            <div class="flex gap-4">
+                <button id="howToPlay" class="px-6 py-2 bg-gray-700 text-white rounded-full font-bold hover:bg-gray-600">How to Play</button>
+                <button id="newQuest" class="px-6 py-2 bg-yellow-400 text-gray-900 rounded-full font-bold hover:bg-yellow-300">New Quest</button>
+                <a href="../index.html" class="px-6 py-2 bg-gray-700 text-white rounded-full font-bold hover:bg-gray-600">Back to Games</a>
+            </div>
+        </div>
+
+        <!-- How to Play Modal -->
+        <div id="howToPlayModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-gray-800 rounded-lg p-8 max-w-2xl mx-4">
+                <h2 class="text-2xl font-bold text-yellow-300 mb-4">How to Play Team Quest</h2>
+                <div class="space-y-4 text-gray-300">
+                    <p><span class="text-yellow-200 font-bold">Game Objective:</span></p>
+                    <ul class="list-disc list-inside ml-4 space-y-2">
+                        <li>Work as a team to complete quests and earn points</li>
+                        <li>Make strategic decisions that benefit the whole team</li>
+                        <li>Progress through different quest levels</li>
+                    </ul>
+                    <p><span class="text-yellow-200 font-bold">How to Play:</span></p>
+                    <ul class="list-disc list-inside ml-4 space-y-2">
+                        <li>Read the quest scenario carefully</li>
+                        <li>Discuss options with your team members</li>
+                        <li>Select the best answer based on team consensus</li>
+                        <li>Learn from incorrect answers to improve future decisions</li>
+                    </ul>
+                    <p><span class="text-yellow-200 font-bold">Scoring:</span></p>
+                    <ul class="list-disc list-inside ml-4 space-y-2">
+                        <li>Each quest has different point values</li>
+                        <li>Higher levels offer more points</li>
+                        <li>Work together to maximize your team score</li>
+                    </ul>
+                </div>
+                <button id="closeHowToPlay" class="mt-6 px-6 py-2 bg-yellow-400 text-gray-900 rounded-full font-bold hover:bg-yellow-300">Got it!</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Team Status -->
+            <div class="bg-gray-800/80 rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-yellow-200 mb-4">Team Status</h2>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-gray-400">Team Score</p>
+                        <p id="teamScore" class="text-4xl font-bold text-yellow-300">0</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400">Active Players</p>
+                        <div id="playersList" class="mt-2 space-y-2">
+                            <div class="bg-gray-700 rounded p-2 flex items-center">
+                                <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                                Player 1 (You)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Quest -->
+            <div class="col-span-2 bg-gray-800/80 rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-yellow-200 mb-4">Current Quest</h2>
+                <div id="currentQuest" class="space-y-4">
+                    <div class="quest-card bg-gray-700 p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-yellow-200 mb-2">Loading Quest...</h3>
+                        <p class="text-gray-300">Please wait or start a new quest.</p>
+                    </div>
+                </div>
+
+                <!-- Quest Actions -->
+                <div class="mt-6 space-y-4">
+                    <div id="questOptions" class="grid grid-cols-2 gap-4">
+                        <!-- Options will be generated here -->
+                    </div>
+                    <button id="submitAnswer" class="w-full px-6 py-3 bg-yellow-400 text-gray-900 rounded-full font-bold hover:bg-yellow-300 disabled:opacity-50" disabled>Submit Answer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quest Log -->
+        <div class="mt-8 bg-gray-800/80 rounded-lg p-6">
+            <h2 class="text-2xl font-bold text-yellow-200 mb-4">Quest Log</h2>
+            <div id="questLog" class="space-y-2 max-h-48 overflow-y-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        const quests = [
+            {
+                question: "Your team discovers an ancient puzzle box. To open it, you must...",
+                options: [
+                    "Work together to solve the sequence of symbols",
+                    "Use brute force to break it open",
+                    "Trade it for a known treasure",
+                    "Leave it for another team"
+                ],
+                correct: 0,
+                points: 100
+            },
+            {
+                question: "A magical bridge appears, but it can only hold two people at a time. Your team of four must cross in...",
+                options: [
+                    "Everyone for themselves",
+                    "Pairs, with the strongest helping the weakest",
+                    "One at a time, slowly",
+                    "Send the fastest runner with a rope"
+                ],
+                correct: 1,
+                points: 150
+            },
+            {
+                question: "Your team finds a map with three possible routes to the treasure. You should...",
+                options: [
+                    "Split up to cover more ground",
+                    "Take the shortest route immediately",
+                    "Analyze the risks and rewards together",
+                    "Wait for another team to go first"
+                ],
+                correct: 2,
+                points: 200
+            }
+        ];
+
+        let currentQuestIndex = -1;
+        let teamScore = 0;
+        let selectedOption = -1;
+
+        function startNewQuest() {
+            currentQuestIndex = Math.floor(Math.random() * quests.length);
+            const quest = quests[currentQuestIndex];
+            
+            document.getElementById('currentQuest').innerHTML = `
+                <div class="quest-card bg-gray-700 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-yellow-200 mb-2">${quest.question}</h3>
+                    <p class="text-gray-300">Choose wisely as a team!</p>
+                    <p class="text-yellow-300 mt-2">Points: ${quest.points}</p>
+                </div>
+            `;
+
+            const optionsDiv = document.getElementById('questOptions');
+            optionsDiv.innerHTML = quest.options.map((option, index) => `
+                <button 
+                    class="option-btn bg-gray-700 p-4 rounded-lg text-left hover:bg-gray-600 transition-colors"
+                    data-index="${index}"
+                >
+                    ${option}
+                </button>
+            `).join('');
+
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.addEventListener('click', () => selectOption(parseInt(btn.dataset.index)));
+            });
+
+            selectedOption = -1;
+            document.getElementById('submitAnswer').disabled = true;
+        }
+
+        function selectOption(index) {
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('bg-yellow-400', 'text-gray-900');
+                btn.classList.add('bg-gray-700');
+            });
+            
+            const selectedBtn = document.querySelector(`[data-index="${index}"]`);
+            selectedBtn.classList.remove('bg-gray-700');
+            selectedBtn.classList.add('bg-yellow-400', 'text-gray-900');
+            
+            selectedOption = index;
+            document.getElementById('submitAnswer').disabled = false;
+        }
+
+        function logQuest(message, success = true) {
+            const log = document.getElementById('questLog');
+            const entry = document.createElement('div');
+            entry.className = `p-2 rounded ${success ? 'bg-green-900/30' : 'bg-red-900/30'}`;
+            entry.textContent = message;
+            log.insertBefore(entry, log.firstChild);
+        }
+
+        function simulatePlayers() {
+            const players = document.getElementById('playersList');
+            const numPlayers = Math.floor(Math.random() * 2) + 2; // 2-3 other players
+            
+            while (players.children.length < numPlayers) {
+                const playerDiv = document.createElement('div');
+                playerDiv.className = 'bg-gray-700 rounded p-2 flex items-center';
+                playerDiv.innerHTML = `
+                    <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                    Player ${players.children.length + 1}
+                `;
+                players.appendChild(playerDiv);
+            }
+        }
+
+        document.getElementById('submitAnswer').addEventListener('click', () => {
+            const quest = quests[currentQuestIndex];
+            if (selectedOption === quest.correct) {
+                teamScore += quest.points;
+                document.getElementById('teamScore').textContent = teamScore;
+                logQuest(`Team completed the quest successfully! +${quest.points} points`);
+            } else {
+                logQuest('The team\'s approach was unsuccessful. Try a different strategy!', false);
+            }
+            
+            setTimeout(startNewQuest, 1500);
+        });
+
+        document.getElementById('newQuest').addEventListener('click', startNewQuest);
+        
+        // Initialize game
+        window.addEventListener('load', () => {
+            simulatePlayers();
+            startNewQuest();
+        });
+    </script>
+</body>
+</html>
