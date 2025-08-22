@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chain Reaction Game - Multi Player</title>
+  <title>Chain Reaction Game - Multi Player | Backbenchers</title>
+  <meta name="description" content="Play Chain Reaction - an exciting multiplayer strategy game where you create explosive chain reactions to capture the board!" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -17,6 +18,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      padding-top: 64px;
     }
 
     #game {
@@ -84,6 +86,9 @@
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-black text-white">
 
+  <!-- Header Include -->
+  <header id="header-placeholder"></header>
+
   <!-- Main Content -->
   <div class="container mx-auto px-4 py-8">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -91,7 +96,7 @@
         <label class="block text-lg mb-2" for="playerCount">
           🎮 Select Players
         </label>
-        <select id="playerCount" class="w-full md:w-auto bg-gray-800 text-white rounded-lg px-4 py-2 border border-gray-700 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 focus:outline-none" title="Select Number of Players">
+        <select id="playerCount" class="w-full md:w-auto bg-gray-800 text-white rounded-lg px-4 py-2 border border-gray-700 focus:border-yellow-500 focus:ring-2 focus:ring-yellow-500 focus:outline-none">
           <option value="2">2 Players</option>
           <option value="3">3 Players</option>
           <option value="4">4 Players</option>
@@ -136,4 +141,217 @@
             <li>Chain reactions occur when explosions trigger other cells</li>
             <li>You can only place orbs in empty cells or cells you own</li>
           </ul>
-          <p>🏆 <strong>Winning:</strong> Eliminate other players by capturing their orbs
+          <p>🏆 <strong>Winning:</strong> Eliminate other players by capturing their orbs!</p>
+        </div>
+        <button onclick="closeHelp()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white">
+          ✕
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Include -->
+  <footer id="footer-placeholder"></footer>
+  <script>
+    // Game Logic
+    const ROWS = 6, COLS = 6;
+    const colorMap = ['red', 'green', 'blue', 'yellow', 'purple', 'orange'];
+    const gameBoard = document.getElementById("game");
+    const currentPlayerName = document.getElementById("currentPlayerName");
+    const playerCountSelect = document.getElementById("playerCount");
+    const helpModal = document.getElementById("helpModal");
+
+    let playerCount = 2;
+    let currentPlayerIndex = 0;
+    let grid = [];
+    let activePlayers = [];
+    let playerHasMoved = new Set();
+
+    function showHelp() {
+      helpModal.style.display = 'flex';
+    }
+
+    function closeHelp() {
+      helpModal.style.display = 'none';
+    }
+
+    function initGrid() {
+      gameBoard.innerHTML = '';
+      grid = [];
+      activePlayers = colorMap.slice(0, playerCount);
+      playerHasMoved.clear();
+      
+      for (let r = 0; r < ROWS; r++) {
+        grid[r] = [];
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+          cell.setAttribute('role', 'gridcell');
+          cell.addEventListener("click", handleClick);
+          gameBoard.appendChild(cell);
+
+          grid[r][c] = {
+            count: 0,
+            owner: null,
+            el: cell
+          };
+          renderCell(r, c);
+        }
+      }
+    }
+
+    function handleClick(e) {
+      if (activePlayers.length <= 1) return;
+      
+      const r = parseInt(e.currentTarget.dataset.row);
+      const c = parseInt(e.currentTarget.dataset.col);
+      const cell = grid[r][c];
+      const player = activePlayers[currentPlayerIndex];
+
+      if (!player || (cell.owner && cell.owner !== player)) return;
+
+      addOrb(r, c, player);
+      playerHasMoved.add(player);
+      eliminatePlayers();
+      checkWinner();
+
+      updateCurrentPlayer();
+    }
+
+    function updateCurrentPlayer() {
+      if (activePlayers.length <= 1) return;
+      currentPlayerIndex = (currentPlayerIndex + 1) % activePlayers.length;
+      const nextPlayer = activePlayers[currentPlayerIndex];
+      currentPlayerName.textContent = capitalize(nextPlayer);
+      currentPlayerName.style.color = nextPlayer;
+    }
+
+    function eliminatePlayers() {
+      activePlayers = activePlayers.filter(p => {
+        if (!playerHasMoved.has(p)) return true;
+        for (let r = 0; r < ROWS; r++) {
+          for (let c = 0; c < COLS; c++) {
+            if (grid[r][c].owner === p) return true;
+          }
+        }
+        return false;
+      });
+      if (currentPlayerIndex >= activePlayers.length) {
+        currentPlayerIndex = 0;
+      }
+    }
+
+    function addOrb(r, c, player) {
+      const cell = grid[r][c];
+      cell.count++;
+      cell.owner = player;
+      renderCell(r, c);
+
+      const max = getCriticalMass(r, c);
+      if (cell.count >= max) {
+        explode(r, c, player);
+      }
+    }
+
+    function explode(r, c, player) {
+      const cell = grid[r][c];
+      cell.count = 0;
+      cell.owner = null;
+      renderCell(r, c);
+
+      const dirs = [[0,1], [1,0], [0,-1], [-1,0]];
+      for (let [dr, dc] of dirs) {
+        const nr = r + dr;
+        const nc = c + dc;
+        if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS) {
+          addOrb(nr, nc, player);
+        }
+      }
+    }
+
+    function getCriticalMass(r, c) {
+      if ((r === 0 || r === ROWS - 1) && (c === 0 || c === COLS - 1)) return 2;
+      if (r === 0 || r === ROWS - 1 || c === 0 || c === COLS - 1) return 3;
+      return 4;
+    }
+
+    function renderCell(r, c) {
+      const { count, owner, el } = grid[r][c];
+      el.innerHTML = '';
+      
+      if (!owner || count === 0) return;
+
+      const orbs = document.createElement("div");
+      orbs.className = "orbs";
+
+      for (let i = 0; i < count; i++) {
+        const orb = document.createElement("div");
+        orb.className = "orb";
+        orb.style.backgroundColor = owner;
+        orbs.appendChild(orb);
+      }
+
+      el.appendChild(orbs);
+    }
+
+    function checkWinner() {
+      if (activePlayers.length === 1) {
+        setTimeout(() => {
+          alert(`${capitalize(activePlayers[0])} wins! 🎉`);
+          location.reload();
+        }, 100);
+      }
+    }
+
+    function capitalize(s) {
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    playerCountSelect.addEventListener('change', () => {
+      playerCount = parseInt(playerCountSelect.value);
+      currentPlayerIndex = 0;
+      initGrid();
+      currentPlayerName.textContent = capitalize(colorMap[currentPlayerIndex]);
+      currentPlayerName.style.color = colorMap[currentPlayerIndex];
+    });
+
+    // Initialize game and load header/footer
+    document.addEventListener('DOMContentLoaded', () => {
+      initGrid();
+      // Add error handling for fetch operations
+      fetch('../header.html')
+        .then(r => {
+          if (!r.ok) throw new Error('Failed to load header');
+          return r.text();
+        })
+        .then(html => {
+          document.getElementById('header-placeholder').innerHTML = html;
+          // Load header script after header HTML is inserted
+          const headerScript = document.createElement('script');
+          headerScript.src = '../assets/js/header.js';
+          document.body.appendChild(headerScript);
+        })
+        .catch(err => {
+          console.error('Error loading header:', err);
+          document.getElementById('header-placeholder').innerHTML = '<div class="text-red-500">Error loading header</div>';
+        });
+
+      fetch('../footer.html')
+        .then(r => {
+          if (!r.ok) throw new Error('Failed to load footer');
+          return r.text();
+        })
+        .then(html => {
+          document.getElementById('footer-placeholder').innerHTML = html;
+        })
+        .catch(err => {
+          console.error('Error loading footer:', err);
+          document.getElementById('footer-placeholder').innerHTML = '<div class="text-red-500">Error loading footer</div>';
+        });
+    });
+  </script>
+ 
+</body>
+</html>
