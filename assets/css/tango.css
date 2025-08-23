@@ -6,7 +6,8 @@ td { width: 60px; height: 60px; border: 1px solid #888; font-size: 28px; text-al
 td:hover { background-color: #333; }
 .locked { background-color: #333; color: #777; cursor: not-allowed; }
 .constraint-sign { position: absolute; font-weight: bold; font-size: 22px; color: #ff4081; pointer-events: none; z-index: 2; }
-#controls { margin-bottom: 20px; }
+#controls { margin-bottom: 20px;
+padding: 5% }
 select, button { font-family: 'VT323', monospace; font-size: 1.2em; padding: 5px 10px; background-color: #282828; color: #f8f8f2; border: 1px solid #888; border-radius: 4px; margin: 0 5px; cursor: pointer; }
 button:hover, select:hover { background-color: #444; }
 #message { font-weight: bold; color: #ff5252; margin-top: 15px; font-size: 1.4em; }

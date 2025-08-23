@@ -408,8 +408,39 @@
       }, 200);
 
       // Header/Footer includes
-      fetch('header.html').then(r => r.text()).then(d => { document.getElementById('header-placeholder').innerHTML = d; });
-      fetch('footer.html').then(r => r.text()).then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+      fetch('header.html')
+        .then(r => {
+          if (!r.ok) throw new Error('Failed to load header');
+          return r.text();
+        })
+        .then(html => {
+          document.getElementById('header-placeholder').innerHTML = html;
+          // Load header script after header HTML is inserted
+          const headerScript = document.createElement('script');
+          headerScript.src = 'assets/js/header.js';
+          document.body.appendChild(headerScript);
+        })
+        .catch(err => {
+          console.error('Error loading header:', err);
+          document.getElementById('header-placeholder').innerHTML = '<div class="text-red-500">Error loading header</div>';
+        });
+
+        fetch('footer.html')
+        .then(r => {
+          if (!r.ok) throw new Error('Failed to load header');
+          return r.text();
+        })
+        .then(html => {
+          document.getElementById('footer-placeholder').innerHTML = html;
+          // Load header script after header HTML is inserted
+          const headerScript = document.createElement('script');
+          headerScript.src = 'assets/js/footer.js';
+          document.body.appendChild(headerScript);
+        })
+        .catch(err => {
+          console.error('Error loading header:', err);
+          document.getElementById('footer-placeholder').innerHTML = '<div class="text-red-500">Error loading header</div>';
+        });
 
       // Initialize games grid and pagination
       updateGames();
