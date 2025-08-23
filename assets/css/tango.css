@@ -21,6 +21,9 @@ button:hover, select:hover { background-color: #444; }
 		word-break: break-word;
 		padding: 0 8px;
 	}
+  #controls {
+    padding: 40px
+  }
 	#controls select, 
   #controls button {
     font-family: 'VT323', monospace;
