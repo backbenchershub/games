@@ -1,180 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tango Puzzle - Backbenchers Edition</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tango Puzzle</title>
 
+  <!-- ✅ Add Tailwind (same as working file) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=VT323&display=swap" rel="stylesheet" />
 
-  <style>
-    body {
-      font-family: 'VT323', monospace;
-      background-color: #121212;
-      color: #f8f8f2;
-      min-height: 100vh;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .game-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    .controls {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .btn {
-      font-family: 'VT323', monospace;
-      font-size: 1.2rem;
-      padding: 0.5rem 1rem;
-      background-color: #ffcc00;
-      color: #000;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn:hover {
-      background-color: #ffdd57;
-      transform: translateY(-2px);
-    }
-
-    select {
-      font-family: 'VT323', monospace;
-      font-size: 1.2rem;
-      padding: 0.5rem;
-      background-color: #282828;
-      color: #f8f8f2;
-      border: 1px solid #ffcc00;
-      border-radius: 4px;
-    }
-
-    table {
-      border-collapse: separate;
-      border-spacing: 0.5rem;
-      margin: 2rem auto;
-    }
-
-    td {
-      width: 3.5rem;
-      height: 3.5rem;
-      background-color: #1e1e1e;
-      border: 2px solid #ffcc00;
-      border-radius: 8px;
-      font-size: 1.8rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-    }
-
-    td:hover:not(.locked) {
-      background-color: #333;
-      transform: scale(1.05);
-    }
-
-    .locked {
-      background-color: #333;
-      color: #777;
-      cursor: not-allowed;
-      border-color: #666;
-    }
-
-    .constraint-sign {
-      position: absolute;
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: #ff4081;
-      pointer-events: none;
-    }
-
-    @media (max-width: 500px) {
-      td {
-        width: 2.8rem;
-        height: 2.8rem;
-        font-size: 1.4rem;
-      }
-    }
-  </style>
+  <!-- Your custom game CSS (loads after Tailwind, so it overrides where needed) -->
+  <link rel="stylesheet" href="../assets/css/tango.css">
 </head>
 <body>
 
-  <div class="game-container">
-    <h1 class="text-4xl font-bold mb-8 text-center text-yellow-300">🎲 Tango Puzzle</h1>
+  <div id="header-placeholder"></div>
 
-    <div class="controls">
-      <select id="difficulty" class="select-custom" title="Select Difficulty Level">
-        <option value="easy">Easy 😊</option>
-        <option value="medium" selected>Medium 🤔</option>
-        <option value="hard">Hard 😈</option>
+  <h1>🎮 Tango Puzzle - Backbencher Edition</h1>
+  <div id="controls">
+    <label>Difficulty:
+      <select id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
       </select>
-      <button id="resetButton" class="btn">🔄 Reset</button>
-      <button onclick="showHelp()" class="btn">❓ Help</button>
-    </div>
-
-    <div class="overflow-auto">
-      <table id="board"></table>
-    </div>
-
-    <div id="message" class="text-xl text-red-400 mt-4"></div>
+    </label>
+    <button id="resetButton">Reset</button>
+    <button onclick="showRules()">Rules</button>
   </div>
-
-  <!-- Help Modal -->
-  <div id="helpModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50">
-    <div class="bg-gray-800 p-8 rounded-xl max-w-lg w-full mx-4 relative border border-yellow-500/20">
-      <h3 class="text-2xl font-bold text-yellow-400 mb-6">How to Play Tango 🎲</h3>
-      <div class="space-y-4 text-gray-200">
-        <p>🎯 <strong>Objective:</strong> Fill the grid with circles (◯) and crescents (☽) following specific rules.</p>
-        <p>📋 <strong>Rules:</strong></p>
-        <ul class="list-disc pl-5 space-y-2">
-          <li>Each row and column must have equal numbers of ◯ and ☽</li>
-          <li>No more than three of the same symbol can be adjacent</li>
-          <li>Pay attention to constraint signs between cells:
-            <ul class="list-disc pl-5 mt-1">
-              <li>'=' means cells must have the same symbol</li>
-              <li>'≠' means cells must have different symbols</li>
-            </ul>
-          </li>
-          <li>Gray cells are locked and cannot be changed</li>
-        </ul>
-        <p>💡 <strong>Tips:</strong></p>
-        <ul class="list-disc pl-5">
-          <li>Start with rows/columns that have more clues</li>
-          <li>Use constraint signs to deduce necessary symbols</li>
-          <li>Click a cell repeatedly to cycle through symbols</li>
-        </ul>
-      </div>
-      <button onclick="closeHelp()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-700 hover:bg-gray-600 text-white">
-        ✕
-      </button>
-    </div>
+  <div class="table-wrapper">
+    <table id="board"></table>
   </div>
+  <div id="message"></div>
 
+  <div id="footer-placeholder"></div>
+
+  <script src="../assets/js/tango.js"></script>
   <script>
-    // Game logic
-    const helpModal = document.getElementById('helpModal');
-
-    function showHelp() {
-      helpModal.style.display = 'flex';
-    }
-
-    function closeHelp() {
-      helpModal.style.display = 'none';
-    }
-
-    // Rest of your existing game logic here...
-    // [Previous game logic code remains unchanged]
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('../header.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('header-placeholder').innerHTML = html;
+          const headerScript = document.createElement('script');
+          headerScript.src = '../assets/js/header.js';
+          document.body.appendChild(headerScript);
+        });
+      fetch('../footer.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('footer-placeholder').innerHTML = html;
+        });
+    });
   </script>
 </body>
 </html>
