@@ -17,19 +17,23 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
-    html, body { min-height: 100vh; }
-    body { font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #232526 0%, #414345 100%); color: #fff; }
-    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
-    .fade-in.visible { opacity: 1; transform: none; }
-    .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
-    .card-hover:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 8px 32px 0 rgba(255,221,87,0.15); }
-    .pixel-bg { background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="%23232226"/><rect x="10" y="10" width="5" height="5" fill="%23ffdd57"/><rect x="25" y="25" width="5" height="5" fill="%23ffdd57"/></svg>'); background-size: 80px 80px; }
-    .btn-cta { background: linear-gradient(90deg, #ffdd57 60%, #fff176 100%); color: #232526; font-weight: 700; border-radius: 9999px; box-shadow: 0 2px 8px #ffdd5733; transition: background 0.2s, box-shadow 0.2s; }
-    .btn-cta:hover { background: #fff176; box-shadow: 0 4px 16px #ffdd5733; }
-    .hero-gradient { background: linear-gradient(120deg, #232526 60%, #ffdd57 100%); }
-    .games-section { background: rgba(30,30,40,0.85); border-radius: 1.5rem; box-shadow: 0 4px 32px 0 rgba(0,0,0,0.12); }
-    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(2px); }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  html, body { min-height: 100vh; }
+  body { font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #232526 0%, #414345 100%); color: #fff; }
+  .fade-in { opacity: 0; transform: translateY(2.1em); transition: opacity 0.7s, transform 0.7s; }
+  .fade-in.visible { opacity: 1; transform: none; }
+  .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+  .card-hover:hover { transform: translateY(-0.5em) scale(1.03); box-shadow: 0 0.5em 2em 0 rgba(255,221,87,0.15); }
+  .pixel-bg { background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="%23232226"/><rect x="10" y="10" width="5" height="5" fill="%23ffdd57"/><rect x="25" y="25" width="5" height="5" fill="%23ffdd57"/></svg>'); background-size: 20vw 20vw; }
+  .btn-cta { background: linear-gradient(90deg, #ffdd57 60%, #fff176 100%); color: #232526; font-weight: 700; border-radius: 9999px; box-shadow: 0 0.15em 0.6em #ffdd5733; transition: background 0.2s, box-shadow 0.2s; }
+  .btn-cta:hover { background: #fff176; box-shadow: 0 0.3em 1.2em #ffdd5733; }
+  .hero-gradient { background: linear-gradient(120deg, #232526 60%, #ffdd57 100%);
+  padding-top: 10%; 
+  padding-bottom: 25%;
+
+}
+  .games-section { background: rgba(30,30,40,0.85); border-radius: 6vw; box-shadow: 0 0.3em 2em 0 rgba(0,0,0,0.12); }
+  .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(0.13em); }
+  .sr-only { position: absolute; width: 0.07em; height: 0.07em; padding: 0; margin: -0.07em; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
   </style>
 </head>
 
@@ -39,7 +43,7 @@
   <header id="header-placeholder"></header>
 
   <!-- Hero Section -->
-  <section class="hero-gradient pixel-bg flex flex-col items-center justify-center min-h-[60vh] py-16 text-center relative">
+  <section class="hero-gradient pixel-bg flex flex-col items-center justify-center min-h-[60vh] text-center relative">
     <h1 class="text-4xl md:text-6xl font-extrabold mb-4 drop-shadow-lg">Backbenchers – Where Fun Begins!</h1>
     <p class="text-lg md:text-2xl max-w-xl mx-auto mb-8 text-gray-200">Unleash your inner rebel. Play, laugh, and challenge your friends with our browser games!</p>
     <button onclick="document.getElementById('games-section').scrollIntoView({behavior:'smooth'})" class="btn-cta px-8 py-3 text-lg mt-2 shadow-lg">Play Now</button>
@@ -51,7 +55,7 @@
   </section>
 
   <!-- Games Section -->
-  <section id="games-section" class="games-section max-w-6xl mx-auto mt-[-3rem] mb-12 px-4 py-12 relative z-10 shadow-xl fade-in">
+    <section id="games-section" class="games-section max-w-6xl mx-auto mt-[-3rem] mb-12 px-4 py-12 relative z-10 shadow-xl fade-in">
     <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 text-yellow-300">Our Games Collection 🎮</h2>
     
     <!-- Search Bar and Controls -->
