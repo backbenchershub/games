@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact Backbenchers Hub - Get in touch with our gaming platform team. Send us your feedback, suggestions, or support requests." />
+  <meta name="keywords" content="contact, backbenchers hub, gaming platform, support, feedback, get in touch" />
+  <meta name="author" content="Backbenchers Hub" />
+  <title>Contact Us - Backbenchers Hub Gaming Platform</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .hero-section {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                  radial-gradient(circle at 50% 50%, #ff6b6b, #4ecdc4, #45b7d1);
+      padding: 100px 0;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .hero-section h1 {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-section .lead {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    .container {
+      padding: 0 20px;
+      max-width: 1200px;
+    }
+
+    .contact-section {
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 50px;
+      margin-bottom: 50px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .contact-form {
+      background: rgba(255,255,255,0.03);
+      border-radius: 15px;
+      padding: 40px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .form-label {
+      color: #4ecdc4;
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .form-control {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(78,205,196,0.3);
+      color: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+      background: rgba(255,255,255,0.15);
+      border-color: #4ecdc4;
+      box-shadow: 0 0 20px rgba(78,205,196,0.3);
+      color: #fff;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .btn-custom {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border: none;
+      color: white;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-custom:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      color: white;
+    }
+
+    .contact-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+
+    .info-card {
+      background: rgba(255,255,255,0.05);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .info-card i {
+      font-size: 3rem;
+      color: #4ecdc4;
+      margin-bottom: 20px;
+    }
+
+    .info-card h4 {
+      color: #ff6b6b;
+      margin-bottom: 15px;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border-radius: 50%;
+      color: white;
+      text-decoration: none;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      transform: translateY(-5px) scale(1.1);
+      color: white;
+    }
+
+    .alert-custom {
+      background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+      border: none;
+      color: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      display: none;
+    }
+
+    .faq-section {
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      padding: 40px;
+      margin-top: 50px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .faq-item {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      border-left: 4px solid #4ecdc4;
+    }
+
+    .faq-question {
+      color: #ff6b6b;
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 2.5rem;
+      }
+      
+      .contact-section,
+      .contact-form {
+        padding: 20px;
+      }
+      
+      .contact-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="header-placeholder"></div>
+
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="container">
+      <h1><i class="fas fa-envelope"></i> Contact Us</h1>
+      <p class="lead">We'd love to hear from you! Get in touch with the Backbenchers Hub team</p>
+    </div>
+  </div>
+
+  <div class="container">
+    
+    <!-- Contact Information -->
+    <div class="contact-info">
+      <div class="info-card">
+        <i class="fas fa-envelope"></i>
+        <h4>Email Us</h4>
+        <p>Send us your questions, feedback, or suggestions</p>
+        <strong>backbenchers@gmail.com</strong>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-clock"></i>
+        <h4>Response Time</h4>
+        <p>We typically respond within</p>
+        <strong>24-48 hours</strong>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-gamepad"></i>
+        <h4>Gaming Support</h4>
+        <p>Need help with games or technical issues?</p>
+        <strong>We're here to help!</strong>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-section">
+      <h2 class="text-center mb-4" style="color: #4ecdc4;">
+        <i class="fas fa-paper-plane"></i> Send Us a Message
+      </h2>
+      
+      <div class="alert alert-custom" id="success-alert">
+        <i class="fas fa-check-circle"></i> Thank you! Your message has been prepared. Please send it to <strong>backbenchers@gmail.com</strong>
+      </div>
+
+      <div class="contact-form">
+        <form id="contact-form">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-4">
+                <label class="form-label">
+                  <i class="fas fa-user"></i> Your Name *
+                </label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="Enter your full name" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-4">
+                <label class="form-label">
+                  <i class="fas fa-envelope"></i> Email Address *
+                </label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="your.email@example.com" required>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-4">
+            <label class="form-label">
+              <i class="fas fa-tag"></i> Subject *
+            </label>
+            <select name="subject" id="subject" class="form-control" required>
+              <option value="">Select a topic...</option>
+              <option value="General Inquiry">General Inquiry</option>
+              <option value="Game Feedback">Game Feedback</option>
+              <option value="Technical Support">Technical Support</option>
+              <option value="Bug Report">Bug Report</option>
+              <option value="Feature Request">Feature Request</option>
+              <option value="Partnership">Partnership Opportunity</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="mb-4">
+            <label class="form-label">
+              <i class="fas fa-comment"></i> Your Message *
+            </label>
+            <textarea name="message" id="message" class="form-control" rows="6" placeholder="Tell us what's on your mind... We'd love to hear your thoughts, suggestions, or any issues you're experiencing!" required></textarea>
+          </div>
+          
+          <div class="mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter" style="background: rgba(255,255,255,0.1); border: 2px solid rgba(78,205,196,0.3);">
+              <label class="form-check-label" for="newsletter" style="margin-left: 10px;">
+                I'd like to receive updates about new games and features
+              </label>
+            </div>
+          </div>
+          
+          <div class="text-center">
+            <button type="submit" class="btn btn-custom">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+      <h2 class="text-center mb-4" style="color: #4ecdc4;">
+        <i class="fas fa-question-circle"></i> Frequently Asked Questions
+      </h2>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <i class="fas fa-gamepad"></i> How do I report a bug in a game?
+        </div>
+        <div class="faq-answer">
+          Please use the contact form above with "Bug Report" as the subject. Include details about which game, what device you're using, and steps to reproduce the issue.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <i class="fas fa-mobile-alt"></i> Are the games mobile-friendly?
+        </div>
+        <div class="faq-answer">
+          Yes! All our games are designed to work seamlessly on desktop, tablet, and mobile devices with responsive controls and optimized layouts.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <i class="fas fa-trophy"></i> How does the level system work?
+        </div>
+        <div class="faq-answer">
+          Our level system tracks your progress across all games. You earn XP by playing games, achieving high scores, and completing challenges. Your progress is saved locally in your browser.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <i class="fas fa-plus"></i> Can I suggest new games or features?
+        </div>
+        <div class="faq-answer">
+          Absolutely! We love hearing from our community. Use the contact form with "Feature Request" as the subject and tell us about your ideas.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <div class="faq-question">
+          <i class="fas fa-users"></i> Is there a community or forum?
+        </div>
+        <div class="faq-answer">
+          We're working on building community features! For now, feel free to reach out to us directly with feedback, suggestions, or just to say hello.
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Links -->
+    <div class="text-center" style="margin: 50px 0;">
+      <h3 style="color: #4ecdc4; margin-bottom: 30px;">
+        <i class="fas fa-share-alt"></i> Connect With Us
+      </h3>
+      <div class="social-links">
+        <a href="mailto:backbenchers@gmail.com" class="social-link" title="Email">
+          <i class="fas fa-envelope"></i>
+        </a>
+        <a href="https://github.com/backbenchershub" class="social-link" title="GitHub" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="#" class="social-link" title="Twitter" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="social-link" title="Discord" target="_blank">
+          <i class="fab fa-discord"></i>
+        </a>
+      </div>
+      <p style="margin-top: 20px; opacity: 0.8;">
+        Follow us for updates, new games, and community highlights!
+      </p>
+    </div>
+
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script>
+    // Load header and footer
+    fetch('header.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('header-placeholder').innerHTML = data;
+        if (typeof initializeHeader === 'function') {
+          initializeHeader();
+        }
+      })
+      .catch(err => console.error('Error loading header:', err));
+
+    fetch('footer.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+        if (typeof initializeFooter === 'function') {
+          initializeFooter();
+        }
+      })
+      .catch(err => console.error('Error loading footer:', err));
+
+    // Contact form handling
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message').value;
+      const newsletter = document.getElementById('newsletter').checked;
+      
+      // Validate form
+      if (!name || !email || !subject || !message) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+      
+      // Create email content
+      const emailSubject = `[Backbenchers Hub] ${subject}`;
+      const emailBody = `Name: ${name}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+
+${newsletter ? 'User opted in for newsletter updates.' : 'User did not opt in for newsletter updates.'}
+
+---
+Sent from Backbenchers Hub Contact Form
+${new Date().toLocaleString()}`;
+      
+      // Create mailto link
+      const mailtoLink = `mailto:backbenchers@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      
+      // Show success message
+      document.getElementById('success-alert').style.display = 'block';
+      document.getElementById('success-alert').scrollIntoView({ behavior: 'smooth' });
+      
+      // Open email client
+      setTimeout(() => {
+        window.location.href = mailtoLink;
+      }, 1000);
+      
+      // Reset form
+      setTimeout(() => {
+        document.getElementById('contact-form').reset();
+        document.getElementById('success-alert').style.display = 'none';
+      }, 5000);
+    });
+
+    // Smooth scrolling for internal links
+    document.addEventListener('click', function(e) {
+      if (e.target.tagName === 'A' && e.target.getAttribute('href') && e.target.getAttribute('href').startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(e.target.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+
+    // Add loading animation
+    window.addEventListener('load', function() {
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.5s ease-in-out';
+      setTimeout(() => {
+        document.body.style.opacity = '1';
+      }, 100);
+    });
+
+    // Form field animations
+    document.querySelectorAll('.form-control').forEach(field => {
+      field.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'translateY(-2px)';
+      });
+      
+      field.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
+
+</body>
+</html>

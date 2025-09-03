@@ -303,7 +303,30 @@ Now, I will create the `memory-match.html` file.
       createBoard();
     });
 
-    document.addEventListener('DOMContentLoaded', createBoard);
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load header and footer
+      fetch('../pages/header.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('header-placeholder').innerHTML = html;
+          if (typeof initializeHeader === 'function') {
+            initializeHeader();
+          }
+        })
+        .catch(err => console.error('Error loading header:', err));
+
+      fetch('../pages/footer.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('footer-placeholder').innerHTML = html;
+          if (typeof initializeFooter === 'function') {
+            initializeFooter();
+          }
+        })
+        .catch(err => console.error('Error loading footer:', err));
+
+      createBoard();
+    });
   </script>
 </body>
 </html>

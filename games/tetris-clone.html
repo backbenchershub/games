@@ -78,6 +78,29 @@
   <footer id="footer-placeholder"></footer>
 
   <script>
+    // Load header and footer
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('../pages/header.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('header-placeholder').innerHTML = html;
+          if (typeof initializeHeader === 'function') {
+            initializeHeader();
+          }
+        })
+        .catch(err => console.error('Error loading header:', err));
+
+      fetch('../pages/footer.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('footer-placeholder').innerHTML = html;
+          if (typeof initializeFooter === 'function') {
+            initializeFooter();
+          }
+        })
+        .catch(err => console.error('Error loading footer:', err));
+    });
+
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const scoreElement = document.getElementById('score');

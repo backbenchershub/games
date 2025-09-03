@@ -42,6 +42,9 @@
   </style>
 </head>
 <body>
+  <!-- Header Include -->
+  <header id="header-placeholder"></header>
+
   <div class="game-container">
     <h1 class="text-3xl font-bold mb-4">🤝 Trust Circle</h1>
     <p class="mb-6">A team building game focused on building trust and communication!</p>
@@ -62,6 +65,32 @@
     function startGame() {
       alert('Trust Circle game starting! Gather your team and begin sharing.');
     }
+
+    // Load header and footer
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('../pages/header.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('header-placeholder').innerHTML = html;
+          if (typeof initializeHeader === 'function') {
+            initializeHeader();
+          }
+        })
+        .catch(err => console.error('Error loading header:', err));
+
+      fetch('../pages/footer.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('footer-placeholder').innerHTML = html;
+          if (typeof initializeFooter === 'function') {
+            initializeFooter();
+          }
+        })
+        .catch(err => console.error('Error loading footer:', err));
+    });
   </script>
+
+  <!-- Footer Include -->
+  <footer id="footer-placeholder"></footer>
 </body>
 </html>

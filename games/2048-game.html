@@ -2,138 +2,535 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>2048 Game - Neon Edition</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2048 Game - Neon Edition | Backbenchers Gaming Platform</title>
+  <meta name="description" content="Play the addictive 2048 number puzzle game with neon styling and level progression. Combine tiles to reach 2048 and beyond in this brain-teasing browser game!" />
+  <meta name="keywords" content="2048 game, number puzzle, neon 2048, browser game, puzzle game, backbenchers games, math game" />
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="2048 Game - Neon Edition | Backbenchers" />
+  <meta property="og:description" content="Play the addictive 2048 number puzzle game with neon styling and level progression. Combine tiles to reach 2048!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://backbenchershub.com/games/2048-game.html" />
+  
+  <link rel="canonical" href="https://backbenchershub.com/games/2048-game.html" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet" />
 
   <style>
     body {
       font-family: 'VT323', monospace;
-      background-color: #121212;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
       color: #f8f8f2;
       min-height: 100vh;
       margin: 0;
-      padding-top: 64px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 20px;
+      padding-top: 90px;
     }
 
     .game-container {
-      margin: 2rem auto;
+      background: rgba(30, 30, 40, 0.9);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 2px solid #ffcc00;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .game-header {
       text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .game-title {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, #ffcc00, #ffdd57);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .game-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(255, 204, 0, 0.1);
+      border: 1px solid #ffcc00;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #ffcc00;
     }
 
     .game-board {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      background-color: #333;
-      border: 2px solid #ffcc00;
-      border-radius: 8px;
-      padding: 10px;
-      margin: 2rem auto;
+      gap: 12px;
+      background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+      border: 3px solid #ffcc00;
+      border-radius: 15px;
+      padding: 15px;
+      margin: 20px auto;
       width: fit-content;
+      box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
     }
 
     .tile {
       width: 80px;
       height: 80px;
-      background-color: #282828;
-      border: 1px solid #444;
-      border-radius: 4px;
+      background: rgba(40, 40, 40, 0.8);
+      border: 2px solid #444;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.5rem;
       font-weight: bold;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    .tile-2 { background-color: #333; color: #f8f8f2; }
-    .tile-4 { background-color: #444; color: #f8f8f2; }
-    .tile-8 { background-color: #ffcc00; color: #000; }
-    .tile-16 { background-color: #ff9900; color: #000; }
-    .tile-32 { background-color: #ff6600; color: #fff; }
-    .tile-64 { background-color: #ff3300; color: #fff; }
-    .tile-128 { background-color: #ff0066; color: #fff; font-size: 1.2rem; }
-    .tile-256 { background-color: #ff00ff; color: #fff; font-size: 1.2rem; }
-    .tile-512 { background-color: #cc00ff; color: #fff; font-size: 1.2rem; }
-    .tile-1024 { background-color: #9900ff; color: #fff; font-size: 1rem; }
-    .tile-2048 { background-color: #6600ff; color: #fff; font-size: 1rem; }
+    .tile::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    .tile:hover::before {
+      transform: translateX(100%);
+    }
+
+    /* Tile Colors with Neon Theme */
+    .tile-2 { background: linear-gradient(45deg, #333, #444); color: #f8f8f2; border-color: #555; }
+    .tile-4 { background: linear-gradient(45deg, #444, #555); color: #f8f8f2; border-color: #666; }
+    .tile-8 { background: linear-gradient(45deg, #ffcc00, #ffdd57); color: #000; border-color: #ffcc00; box-shadow: 0 0 15px rgba(255, 204, 0, 0.5); }
+    .tile-16 { background: linear-gradient(45deg, #ff9900, #ffaa00); color: #000; border-color: #ff9900; box-shadow: 0 0 15px rgba(255, 153, 0, 0.5); }
+    .tile-32 { background: linear-gradient(45deg, #ff6600, #ff7700); color: #fff; border-color: #ff6600; box-shadow: 0 0 15px rgba(255, 102, 0, 0.5); }
+    .tile-64 { background: linear-gradient(45deg, #ff3300, #ff4400); color: #fff; border-color: #ff3300; box-shadow: 0 0 15px rgba(255, 51, 0, 0.5); }
+    .tile-128 { background: linear-gradient(45deg, #ff0066, #ff1177); color: #fff; font-size: 1.2rem; border-color: #ff0066; box-shadow: 0 0 20px rgba(255, 0, 102, 0.6); }
+    .tile-256 { background: linear-gradient(45deg, #ff00ff, #ff11ff); color: #fff; font-size: 1.2rem; border-color: #ff00ff; box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+    .tile-512 { background: linear-gradient(45deg, #cc00ff, #dd11ff); color: #fff; font-size: 1.2rem; border-color: #cc00ff; box-shadow: 0 0 20px rgba(204, 0, 255, 0.6); }
+    .tile-1024 { background: linear-gradient(45deg, #9900ff, #aa11ff); color: #fff; font-size: 1rem; border-color: #9900ff; box-shadow: 0 0 25px rgba(153, 0, 255, 0.7); }
+    .tile-2048 { background: linear-gradient(45deg, #6600ff, #7711ff); color: #fff; font-size: 1rem; border-color: #6600ff; box-shadow: 0 0 30px rgba(102, 0, 255, 0.8); animation: pulse 2s infinite; }
+    .tile-4096 { background: linear-gradient(45deg, #0066ff, #1177ff); color: #fff; font-size: 0.9rem; border-color: #0066ff; box-shadow: 0 0 35px rgba(0, 102, 255, 0.9); animation: pulse 1.5s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
 
     .controls {
-      margin: 2rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin: 20px 0;
     }
 
     .btn {
       font-family: 'VT323', monospace;
       font-size: 1.2rem;
-      padding: 0.5rem 1rem;
-      background-color: #ffcc00;
+      padding: 12px 24px;
+      background: linear-gradient(45deg, #ffcc00, #ffdd57);
       color: #000;
       border: none;
-      border-radius: 4px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3);
+    }
+
+    .btn:hover {
+      background: linear-gradient(45deg, #ffdd57, #fff176);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 204, 0, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .instructions {
+      background: rgba(255, 204, 0, 0.1);
+      border: 1px solid #ffcc00;
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .instructions h3 {
+      color: #ffcc00;
+      margin-bottom: 15px;
+      font-size: 1.3rem;
+    }
+
+    .instructions p {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .mobile-controls {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 200px;
+      margin: 20px auto;
+    }
+
+    .mobile-btn {
+      background: rgba(255, 204, 0, 0.2);
+      border: 2px solid #ffcc00;
+      color: #ffcc00;
+      font-size: 1.5rem;
+      padding: 15px;
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .btn:hover {
-      background-color: #ffdd57;
-      transform: translateY(-2px);
+    .mobile-btn:hover, .mobile-btn:active {
+      background: rgba(255, 204, 0, 0.4);
+      transform: scale(0.95);
     }
 
-    .score {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+    .mobile-btn:nth-child(2) { grid-column: 2; grid-row: 1; }
+    .mobile-btn:nth-child(1) { grid-column: 1; grid-row: 2; }
+    .mobile-btn:nth-child(3) { grid-column: 3; grid-row: 2; }
+    .mobile-btn:nth-child(4) { grid-column: 2; grid-row: 3; }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      main {
+        padding: 10px;
+        padding-top: 80px;
+      }
+
+      .game-container {
+        padding: 20px;
+        margin: 0 10px;
+      }
+
+      .game-title {
+        font-size: 2rem;
+      }
+
+      .game-board {
+        gap: 8px;
+        padding: 10px;
+      }
+
+      .tile {
+        width: 60px;
+        height: 60px;
+        font-size: 1.2rem;
+      }
+
+      .tile-128, .tile-256, .tile-512 {
+        font-size: 1rem;
+      }
+
+      .tile-1024, .tile-2048, .tile-4096 {
+        font-size: 0.8rem;
+      }
+
+      .mobile-controls {
+        display: grid;
+      }
+
+      .instructions {
+        font-size: 0.9rem;
+      }
+
+      .game-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 10px;
+      }
+
+      .stat-value {
+        font-size: 1.2rem;
+      }
     }
 
-    .instructions {
-      margin-top: 1rem;
-      font-size: 1.1rem;
+    @media (max-width: 480px) {
+      .game-container {
+        padding: 15px;
+        margin: 0 5px;
+      }
+
+      .game-title {
+        font-size: 1.5rem;
+      }
+
+      .tile {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+      }
+
+      .tile-128, .tile-256, .tile-512 {
+        font-size: 0.9rem;
+      }
+
+      .tile-1024, .tile-2048, .tile-4096 {
+        font-size: 0.7rem;
+      }
+
+      .btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+      }
+
+      .controls {
+        gap: 10px;
+      }
+    }
+
+    /* Win/Game Over Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #232526, #414345);
+      border: 3px solid #ffcc00;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      animation: modalPop 0.3s ease;
+    }
+
+    @keyframes modalPop {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal h2 {
+      color: #ffcc00;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .modal p {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+
+    .win-modal h2 {
+      color: #00ff88;
+    }
+
+    .level-indicator {
+      background: linear-gradient(45deg, #ffcc00, #ffdd57);
+      color: #000;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-
+  <!-- Header Include -->
   <header id="header-placeholder"></header>
 
-  <div class="game-container">
-    <h1 class="text-4xl font-bold mb-8 text-center text-yellow-300">🔢 2048</h1>
-    
-    <div class="score">Score: <span id="score">0</span></div>
-    
-    <div class="game-board" id="gameBoard"></div>
-    
-    <div class="controls">
-      <button id="newGameButton" class="btn">🎮 New Game</button>
+  <main>
+    <div class="game-container">
+      <div class="game-header">
+        <h1 class="game-title">🔢 2048</h1>
+        <div class="level-indicator" id="difficulty-display">Beginner Mode</div>
+      </div>
+
+      <div class="game-stats">
+        <div class="stat-card">
+          <div class="stat-label">Score</div>
+          <div class="stat-value" id="score">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Best Score</div>
+          <div class="stat-value" id="bestScore">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Moves</div>
+          <div class="stat-value" id="moves">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Best Tile</div>
+          <div class="stat-value" id="bestTile">2</div>
+        </div>
+      </div>
+
+      <div class="game-board" id="gameBoard"></div>
+
+      <div class="controls">
+        <button id="newGameButton" class="btn">🎮 New Game</button>
+        <button id="undoButton" class="btn">↶ Undo</button>
+        <button id="hintButton" class="btn">💡 Hint</button>
+      </div>
+
+      <!-- Mobile Controls -->
+      <div class="mobile-controls" id="mobileControls">
+        <button class="mobile-btn" data-direction="up">⬆️</button>
+        <button class="mobile-btn" data-direction="left">⬅️</button>
+        <button class="mobile-btn" data-direction="right">➡️</button>
+        <button class="mobile-btn" data-direction="down">⬇️</button>
+      </div>
+
+      <div class="instructions">
+        <h3>🎮 How to Play</h3>
+        <p><strong>Desktop:</strong> Use Arrow Keys to move tiles</p>
+        <p><strong>Mobile:</strong> Use the directional buttons above or swipe</p>
+        <p>🔢 Combine tiles with the same number to create larger numbers</p>
+        <p>🏆 Reach 2048 to win, but you can continue playing for higher scores!</p>
+        <p>💡 Use hints when you're stuck, but use them wisely!</p>
+      </div>
     </div>
-    
-    <div class="instructions">
-      Use Arrow Keys to move tiles. Combine tiles to reach 2048!
+  </main>
+
+  <!-- Win Modal -->
+  <div class="modal win-modal" id="winModal">
+    <div class="modal-content">
+      <h2>🎉 You Win!</h2>
+      <p>Congratulations! You reached <strong>2048</strong>!</p>
+      <p>Final Score: <span id="winScore">0</span></p>
+      <p>Total Moves: <span id="winMoves">0</span></p>
+      <div style="margin: 20px 0;">
+        <button class="btn" onclick="continueGame()">Keep Playing</button>
+        <button class="btn" onclick="closeModal('winModal')">New Game</button>
+      </div>
     </div>
   </div>
 
+  <!-- Game Over Modal -->
+  <div class="modal" id="gameOverModal">
+    <div class="modal-content">
+      <h2>🎮 Game Over!</h2>
+      <p>No more moves available!</p>
+      <p>Final Score: <span id="finalScore">0</span></p>
+      <p>Best Tile: <span id="finalBestTile">2</span></p>
+      <p id="newBestScore" style="display: none; color: #00ff88;">🎉 New Best Score!</p>
+      <div style="margin: 20px 0;">
+        <button class="btn" onclick="closeModal('gameOverModal')">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Include -->
   <footer id="footer-placeholder"></footer>
 
+  <!-- Level System -->
+  <script src="../assets/js/game-level-system.js"></script>
+
   <script>
+    // Game variables
     const size = 4;
     let board = [];
     let score = 0;
+    let bestScore = 0;
+    let moves = 0;
+    let bestTile = 2;
+    let gameWon = false;
+    let gameHistory = [];
+    let hintsUsed = 0;
+
+    // Initialize Level System
+    let levelSystem;
 
     const gameBoard = document.getElementById('gameBoard');
     const scoreElement = document.getElementById('score');
+    const bestScoreElement = document.getElementById('bestScore');
+    const movesElement = document.getElementById('moves');
+    const bestTileElement = document.getElementById('bestTile');
     const newGameButton = document.getElementById('newGameButton');
+    const undoButton = document.getElementById('undoButton');
+    const hintButton = document.getElementById('hintButton');
+    const difficultyDisplay = document.getElementById('difficulty-display');
+
+    // Load best score from localStorage
+    function loadBestScore() {
+      const saved = localStorage.getItem('2048_best_score');
+      if (saved) {
+        bestScore = parseInt(saved);
+        bestScoreElement.textContent = bestScore;
+      }
+    }
+
+    function saveBestScore() {
+      localStorage.setItem('2048_best_score', bestScore.toString());
+    }
 
     function initGame() {
       board = Array(size).fill().map(() => Array(size).fill(0));
       score = 0;
+      moves = 0;
+      bestTile = 2;
+      gameWon = false;
+      gameHistory = [];
+      hintsUsed = 0;
+      
       scoreElement.textContent = score;
+      movesElement.textContent = moves;
+      bestTileElement.textContent = bestTile;
+      
       addRandomTile();
       addRandomTile();
       updateDisplay();
+      updateDifficultyDisplay();
+      
+      if (levelSystem) {
+        levelSystem.gameStarted();
+      }
     }
 
     function createBoard() {
@@ -164,6 +561,24 @@
           tile.classList.add(`tile-${value}`);
         }
       });
+      
+      // Update best tile
+      const currentBestTile = Math.max(...board.flat());
+      if (currentBestTile > bestTile) {
+        bestTile = currentBestTile;
+        bestTileElement.textContent = bestTile;
+      }
+    }
+
+    function updateDifficultyDisplay() {
+      let difficulty = 'Beginner';
+      if (bestTile >= 128) difficulty = 'Intermediate';
+      if (bestTile >= 512) difficulty = 'Advanced';
+      if (bestTile >= 1024) difficulty = 'Expert';
+      if (bestTile >= 2048) difficulty = 'Master';
+      if (bestTile >= 4096) difficulty = 'Legendary';
+      
+      difficultyDisplay.textContent = `${difficulty} Mode`;
     }
 
     function addRandomTile() {
@@ -182,7 +597,22 @@
       }
     }
 
+    function saveGameState() {
+      gameHistory.push({
+        board: board.map(row => [...row]),
+        score: score,
+        moves: moves
+      });
+      
+      // Keep only last 10 moves
+      if (gameHistory.length > 10) {
+        gameHistory.shift();
+      }
+    }
+
     function move(direction) {
+      saveGameState();
+      
       let moved = false;
       const newBoard = Array(size).fill().map(() => Array(size).fill(0));
       
@@ -245,12 +675,18 @@
       
       if (moved) {
         board = newBoard;
+        moves++;
         scoreElement.textContent = score;
+        movesElement.textContent = moves;
         addRandomTile();
         updateDisplay();
+        updateDifficultyDisplay();
         
-        if (checkWin()) {
-          setTimeout(() => alert('Congratulations! You reached 2048! 🎉'), 100);
+        if (checkWin() && !gameWon) {
+          gameWon = true;
+          setTimeout(() => showWinModal(), 500);
+        } else if (checkGameOver()) {
+          setTimeout(() => gameOver(), 500);
         }
       }
     }
@@ -266,6 +702,147 @@
       return false;
     }
 
+    function checkGameOver() {
+      // Check for empty cells
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          if (board[y][x] === 0) {
+            return false;
+          }
+        }
+      }
+      
+      // Check for possible merges
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          const current = board[y][x];
+          if ((x < size - 1 && board[y][x + 1] === current) ||
+              (y < size - 1 && board[y + 1][x] === current)) {
+            return false;
+          }
+        }
+      }
+      
+      return true;
+    }
+
+    function showWinModal() {
+      document.getElementById('winScore').textContent = score;
+      document.getElementById('winMoves').textContent = moves;
+      document.getElementById('winModal').style.display = 'flex';
+    }
+
+    function continueGame() {
+      document.getElementById('winModal').style.display = 'none';
+    }
+
+    function gameOver() {
+      // Check for new best score
+      let isNewBestScore = false;
+      if (score > bestScore) {
+        bestScore = score;
+        bestScoreElement.textContent = bestScore;
+        saveBestScore();
+        isNewBestScore = true;
+      }
+
+      // Record game result in level system
+      if (levelSystem) {
+        const won = gameWon || bestTile >= 2048;
+        const perfect = bestTile >= 4096 && moves < 500;
+        levelSystem.gameEnded(score, won, perfect);
+      }
+
+      document.getElementById('finalScore').textContent = score;
+      document.getElementById('finalBestTile').textContent = bestTile;
+      
+      if (isNewBestScore) {
+        document.getElementById('newBestScore').style.display = 'block';
+      } else {
+        document.getElementById('newBestScore').style.display = 'none';
+      }
+      
+      document.getElementById('gameOverModal').style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+      if (modalId === 'gameOverModal' || modalId === 'winModal') {
+        createBoard();
+        initGame();
+      }
+    }
+
+    function undoMove() {
+      if (gameHistory.length > 0) {
+        const lastState = gameHistory.pop();
+        board = lastState.board;
+        score = lastState.score;
+        moves = lastState.moves;
+        
+        scoreElement.textContent = score;
+        movesElement.textContent = moves;
+        updateDisplay();
+      }
+    }
+
+    function showHint() {
+      if (hintsUsed >= 3) {
+        alert('You\'ve used all your hints for this game!');
+        return;
+      }
+      
+      const directions = ['up', 'down', 'left', 'right'];
+      const possibleMoves = [];
+      
+      directions.forEach(dir => {
+        const testBoard = board.map(row => [...row]);
+        // Simulate move to see if it's valid
+        if (canMove(dir)) {
+          possibleMoves.push(dir);
+        }
+      });
+      
+      if (possibleMoves.length > 0) {
+        const bestMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+        alert(`💡 Hint: Try moving ${bestMove.toUpperCase()}!`);
+        hintsUsed++;
+        
+        if (hintsUsed >= 3) {
+          hintButton.textContent = '💡 No Hints';
+          hintButton.disabled = true;
+        } else {
+          hintButton.textContent = `💡 Hint (${3 - hintsUsed} left)`;
+        }
+      } else {
+        alert('No valid moves available!');
+      }
+    }
+
+    function canMove(direction) {
+      // Simple check to see if a move is possible
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          const current = board[y][x];
+          if (current === 0) continue;
+          
+          let nextX = x, nextY = y;
+          if (direction === 'left') nextX = x - 1;
+          else if (direction === 'right') nextX = x + 1;
+          else if (direction === 'up') nextY = y - 1;
+          else if (direction === 'down') nextY = y + 1;
+          
+          if (nextX >= 0 && nextX < size && nextY >= 0 && nextY < size) {
+            if (board[nextY][nextX] === 0 || board[nextY][nextX] === current) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    // Controls
     document.addEventListener('keydown', (e) => {
       switch (e.key) {
         case 'ArrowUp':
@@ -283,13 +860,103 @@
       }
     });
 
+    // Mobile controls
+    document.querySelectorAll('.mobile-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const direction = btn.dataset.direction;
+        move(direction);
+      });
+    });
+
+    // Touch support for mobile
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    gameBoard.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    });
+
+    gameBoard.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+      
+      const minSwipeDistance = 30;
+      
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Horizontal swipe
+        if (Math.abs(deltaX) > minSwipeDistance) {
+          if (deltaX > 0) move('right');
+          else move('left');
+        }
+      } else {
+        // Vertical swipe
+        if (Math.abs(deltaY) > minSwipeDistance) {
+          if (deltaY > 0) move('down');
+          else move('up');
+        }
+      }
+    });
+
+    // Event listeners
     newGameButton.addEventListener('click', () => {
       createBoard();
       initGame();
     });
 
-    createBoard();
-    initGame();
+    undoButton.addEventListener('click', undoMove);
+    hintButton.addEventListener('click', showHint);
+
+    // Initialize game
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load header and footer
+      fetch('../pages/header.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('header-placeholder').innerHTML = html;
+          // Initialize header functionality if needed
+          if (typeof initializeHeader === 'function') {
+            initializeHeader();
+          }
+        })
+        .catch(err => console.error('Error loading header:', err));
+
+      fetch('../pages/footer.html')
+        .then(r => r.text())
+        .then(html => {
+          document.getElementById('footer-placeholder').innerHTML = html;
+          // Initialize footer functionality if needed
+          if (typeof initializeFooter === 'function') {
+            initializeFooter();
+          }
+        })
+        .catch(err => console.error('Error loading footer:', err));
+
+      // Initialize level system
+      if (window.GameLevelSystem) {
+        levelSystem = new GameLevelSystem('2048');
+      }
+
+      loadBestScore();
+      createBoard();
+      initGame();
+    });
+
+    // Responsive board
+    function resizeBoard() {
+      const container = gameBoard.parentElement;
+      const maxWidth = Math.min(400, container.clientWidth - 40);
+      gameBoard.style.width = maxWidth + 'px';
+    }
+
+    window.addEventListener('resize', resizeBoard);
+    window.addEventListener('load', resizeBoard);
   </script>
 </body>
 </html>

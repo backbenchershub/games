@@ -20,6 +20,9 @@
     </style>
 </head>
 <body class="min-h-screen text-white">
+    <!-- Header Include -->
+    <header id="header-placeholder"></header>
+
     <div class="container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-4xl font-bold text-yellow-300">Team Quest</h1>
@@ -235,6 +238,32 @@
             simulatePlayers();
             startNewQuest();
         });
+
+        // Load header and footer
+        document.addEventListener('DOMContentLoaded', function() {
+          fetch('../pages/header.html')
+            .then(r => r.text())
+            .then(html => {
+              document.getElementById('header-placeholder').innerHTML = html;
+              if (typeof initializeHeader === 'function') {
+                initializeHeader();
+              }
+            })
+            .catch(err => console.error('Error loading header:', err));
+
+          fetch('../pages/footer.html')
+            .then(r => r.text())
+            .then(html => {
+              document.getElementById('footer-placeholder').innerHTML = html;
+              if (typeof initializeFooter === 'function') {
+                initializeFooter();
+              }
+            })
+            .catch(err => console.error('Error loading footer:', err));
+        });
     </script>
+
+    <!-- Footer Include -->
+    <footer id="footer-placeholder"></footer>
 </body>
 </html>

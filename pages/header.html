@@ -1,0 +1,224 @@
+<!-- header.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<header id="site-header" class="fixed top-0 left-0 right-0 w-full z-[9999] bg-gradient-to-r from-gray-900 to-gray-800 shadow-lg isolate">
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+    <!-- Logo & Title -->
+    <div class="flex items-center gap-3">
+      <a href="/index.html" class="flex items-center gap-3 hover:opacity-90 transition-opacity">
+        <div class="w-10 h-10 flex items-center justify-center bg-yellow-400 rounded shadow-md border-2 border-yellow-300">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="24" height="24" rx="4" fill="#22223B" stroke="#ffdd57" stroke-width="2"/>
+            <rect x="7" y="7" width="4" height="4" fill="#ffdd57"/>
+            <rect x="17" y="7" width="4" height="4" fill="#ffdd57"/>
+            <rect x="7" y="17" width="4" height="4" fill="#ffdd57"/>
+            <rect x="17" y="17" width="4" height="4" fill="#ffdd57"/>
+          </svg>
+        </div>
+        <span class="font-orbitron text-2xl font-bold text-yellow-300 tracking-wide select-none">Backbenchers</span>
+      </a>
+    </div>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex gap-6 text-lg font-semibold">
+      <a href="/games/index.html" class="text-gray-100 hover:text-yellow-300 transition-colors duration-200 relative group">
+        Home
+        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-300 transition-all duration-200 group-hover:w-full"></span>
+      </a>
+      <a href="/games/pages/about.html" class="text-gray-100 hover:text-yellow-300 transition-colors duration-200 relative group">
+        About
+        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-300 transition-all duration-200 group-hover:w-full"></span>
+      </a>
+      <a href="/games/pages/contact.html" class="text-gray-100 hover:text-yellow-300 transition-colors duration-200 relative group">
+        Contact
+        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-300 transition-all duration-200 group-hover:w-full"></span>
+      </a>
+    </nav>
+
+    <!-- Hamburger (Mobile) -->
+    <button
+      id="menuBtn"
+      class="md:hidden flex items-center p-2 rounded-lg bg-transparent border-0 outline-none focus:outline-none focus:ring-2 focus:ring-yellow-400/50 hover:bg-gray-700/40 transition-all duration-200"
+      aria-label="Open menu"
+      type="button"
+    >
+      <svg class="w-7 h-7 text-yellow-300 block transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true" id="hamburger-icon">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div
+    id="menuOverlay"
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9998] md:hidden opacity-0 invisible transition-all duration-300"
+  ></div>
+  
+  <!-- Mobile Drawer -->
+  <div
+    id="drawer"
+    class="fixed top-0 left-[-100%] w-80 max-w-[85vw] min-h-screen h-full bg-gradient-to-b from-yellow-400 to-yellow-500 shadow-xl z-[9999] transition-all duration-300 ease-in-out md:hidden"
+  >
+    <div class="flex items-center justify-between px-6 py-4 border-b border-yellow-600 bg-yellow-400">
+      <span class="font-orbitron text-xl font-bold text-black">Backbenchers</span>
+      <button
+        id="closeDrawer"
+        class="p-2 rounded-lg bg-transparent border-0 outline-none focus:outline-none hover:bg-yellow-500/60 transition-colors duration-200"
+        aria-label="Close menu"
+        type="button"
+      >
+        <svg class="w-6 h-6 text-black block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-2 px-6 py-6 bg-gradient-to-b from-yellow-400 to-yellow-500 h-full">
+      <a href="/games/index.html" class="text-black hover:text-gray-800 transition-colors duration-200 py-3 px-4 rounded-lg hover:bg-yellow-600/30 font-semibold text-lg">🏠 Home</a>
+      <a href="/games/pages/about.html" class="text-black hover:text-gray-800 transition-colors duration-200 py-3 px-4 rounded-lg hover:bg-yellow-600/30 font-semibold text-lg">ℹ️ About</a>
+      <a href="/games/pages/contact.html" class="text-black hover:text-gray-800 transition-colors duration-200 py-3 px-4 rounded-lg hover:bg-yellow-600/30 font-semibold text-lg">📞 Contact</a>
+      
+      <div class="mt-6 pt-6 border-t border-yellow-600">
+        <h3 class="text-black font-bold text-lg mb-3">🎮 Popular Games</h3>
+        <div class="space-y-2">
+          <a href="/games/games/snake-game.html" class="block text-black hover:text-gray-800 transition-colors duration-200 py-2 px-4 rounded-lg hover:bg-yellow-600/30">🐍 Snake Game</a>
+          <a href="/games/games/2048-game.html" class="block text-black hover:text-gray-800 transition-colors duration-200 py-2 px-4 rounded-lg hover:bg-yellow-600/30">🔢 2048</a>
+          <a href="/games/games/tetris-clone.html" class="block text-black hover:text-gray-800 transition-colors duration-200 py-2 px-4 rounded-lg hover:bg-yellow-600/30">🧱 Tetris</a>
+          <a href="/games/games/memory-match.html" class="block text-black hover:text-gray-800 transition-colors duration-200 py-2 px-4 rounded-lg hover:bg-yellow-600/30">🧠 Memory Match</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <style>
+    .font-orbitron {
+      font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    /* Ensure header doesn't interfere with page content */
+    body {
+      padding-top: 70px;
+    }
+    
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 65px;
+      }
+      
+      #site-header .max-w-7xl {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      
+      #site-header .font-orbitron {
+        font-size: 1.25rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding-top: 60px;
+      }
+      
+      #site-header .max-w-7xl {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+      }
+      
+      #site-header .font-orbitron {
+        font-size: 1.1rem;
+      }
+      
+      #site-header .w-10 {
+        width: 2rem;
+        height: 2rem;
+      }
+      
+      #site-header svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    
+    /* Smooth animations */
+    #drawer.open {
+      left: 0;
+    }
+    
+    #menuOverlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Active page highlighting */
+    .nav-active {
+      color: #fbbf24 !important;
+    }
+    
+    .nav-active .absolute {
+      width: 100% !important;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuBtn = document.getElementById('menuBtn');
+      const drawer = document.getElementById('drawer');
+      const overlay = document.getElementById('menuOverlay');
+      const closeBtn = document.getElementById('closeDrawer');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      
+      function openMenu() {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        hamburgerIcon.style.transform = 'rotate(90deg)';
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeMenu() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        hamburgerIcon.style.transform = 'rotate(0deg)';
+        document.body.style.overflow = '';
+      }
+      
+      menuBtn.addEventListener('click', openMenu);
+      closeBtn.addEventListener('click', closeMenu);
+      overlay.addEventListener('click', closeMenu);
+      
+      // Close menu on escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeMenu();
+        }
+      });
+      
+      // Highlight active page
+      const currentPage = window.location.pathname;
+      const navLinks = document.querySelectorAll('nav a');
+      
+      navLinks.forEach(link => {
+        const linkPath = new URL(link.href).pathname;
+        if (linkPath === currentPage || (currentPage === '/' && linkPath === '/index.html')) {
+          link.classList.add('nav-active');
+        }
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) {
+          closeMenu();
+        }
+      });
+    });
+  </script>
+</header>

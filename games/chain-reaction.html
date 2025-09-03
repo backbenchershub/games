@@ -321,7 +321,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       initGrid();
       // Add error handling for fetch operations
-      fetch('../header.html')
+      fetch('../pages/header.html')
         .then(r => {
           if (!r.ok) throw new Error('Failed to load header');
           return r.text();
@@ -332,19 +332,27 @@
           const headerScript = document.createElement('script');
           headerScript.src = '../assets/js/header.js';
           document.body.appendChild(headerScript);
+          // Initialize header functionality if needed
+          if (typeof initializeHeader === 'function') {
+            initializeHeader();
+          }
         })
         .catch(err => {
           console.error('Error loading header:', err);
           document.getElementById('header-placeholder').innerHTML = '<div class="text-red-500">Error loading header</div>';
         });
 
-      fetch('../footer.html')
+      fetch('../pages/footer.html')
         .then(r => {
           if (!r.ok) throw new Error('Failed to load footer');
           return r.text();
         })
         .then(html => {
           document.getElementById('footer-placeholder').innerHTML = html;
+          // Initialize footer functionality if needed
+          if (typeof initializeFooter === 'function') {
+            initializeFooter();
+          }
         })
         .catch(err => {
           console.error('Error loading footer:', err);

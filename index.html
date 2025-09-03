@@ -18,7 +18,70 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
   html, body { min-height: 100vh; }
-  body { font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #232526 0%, #414345 100%); color: #fff; }
+  body { 
+    font-family: 'Orbitron', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: linear-gradient(135deg, #232526 0%, #414345 100%); 
+    color: #fff; 
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  /* Wallpaper Background Effect */
+  .wallpaper-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .wallpaper-bg.active {
+    opacity: 0.15;
+  }
+  
+  .wallpaper-1 {
+    background-image: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+  }
+  
+  .wallpaper-2 {
+    background-image: radial-gradient(circle at 20% 50%, #ff9a9e 0%, #fecfef 50%, #fecfef 100%),
+                      radial-gradient(circle at 80% 20%, #a8edea 0%, #fed6e3 100%),
+                      radial-gradient(circle at 40% 40%, #d299c2 0%, #fef9d7 100%);
+    background-blend-mode: multiply;
+  }
+  
+  .wallpaper-3 {
+    background-image: conic-gradient(from 0deg at 50% 50%, #ff0080, #ff8c00, #40e0d0, #ee82ee, #ff0080);
+    background-size: 200% 200%;
+    animation: conicRotate 20s linear infinite;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  @keyframes conicRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Hide wallpapers on mobile and tablet */
+  @media (max-width: 1024px) {
+    .wallpaper-bg {
+      display: none;
+    }
+  }
+  
   .fade-in { opacity: 0; transform: translateY(2.1em); transition: opacity 0.7s, transform 0.7s; }
   .fade-in.visible { opacity: 1; transform: none; }
   .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
@@ -26,11 +89,13 @@
   .pixel-bg { background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="%23232226"/><rect x="10" y="10" width="5" height="5" fill="%23ffdd57"/><rect x="25" y="25" width="5" height="5" fill="%23ffdd57"/></svg>'); background-size: 20vw 20vw; }
   .btn-cta { background: linear-gradient(90deg, #ffdd57 60%, #fff176 100%); color: #232526; font-weight: 700; border-radius: 9999px; box-shadow: 0 0.15em 0.6em #ffdd5733; transition: background 0.2s, box-shadow 0.2s; }
   .btn-cta:hover { background: #fff176; box-shadow: 0 0.3em 1.2em #ffdd5733; }
-  .hero-gradient { background: linear-gradient(120deg, #232526 60%, #ffdd57 100%);
-  padding-top: 10%; 
-  padding-bottom: 25%;
-
-}
+  .hero-gradient { 
+    background: linear-gradient(120deg, #232526 60%, #ffdd57 100%);
+    padding-top: 10%; 
+    padding-bottom: 25%;
+    position: relative;
+    z-index: 1;
+  }
   .games-section { background: rgba(30,30,40,0.85); border-radius: 6vw; box-shadow: 0 0.3em 2em 0 rgba(0,0,0,0.12); }
   .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(0.13em); }
   .sr-only { position: absolute; width: 0.07em; height: 0.07em; padding: 0; margin: -0.07em; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
@@ -38,6 +103,10 @@
 </head>
 
 <body>
+  <!-- Wallpaper Backgrounds -->
+  <div class="wallpaper-bg wallpaper-1" id="wallpaper-1"></div>
+  <div class="wallpaper-bg wallpaper-2" id="wallpaper-2"></div>
+  <div class="wallpaper-bg wallpaper-3" id="wallpaper-3"></div>
 
   <!-- Header Include -->
   <header id="header-placeholder"></header>
@@ -77,84 +146,9 @@
     </div>
     
     <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-      <!-- Game Card: Chain Reaction -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">💥</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Chain Reaction</h3>
-        <p class="text-gray-300 text-center mb-4">Strategize and trigger colorful chain explosions!</p>
-        <a href="games/chain-reaction.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: Tango -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">🎲</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Tango</h3>
-        <p class="text-gray-300 text-center mb-4">Fast moves, quick wits! Sync your steps in this puzzle showdown.</p>
-        <a href="games/tango.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: Memory Match -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">🧠</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Memory Match</h3>
-        <p class="text-gray-300 text-center mb-4">Test your memory by matching pairs of cards!</p>
-        <a href="games/memory-match.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: Snake Game -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">🐍</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Snake Game</h3>
-        <p class="text-gray-300 text-center mb-4">Classic snake game with neon styling!</p>
-        <a href="games/snake-game.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: Tetris Clone -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">🧱</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Tetris Clone</h3>
-        <p class="text-gray-300 text-center mb-4">Classic block stacking puzzle game!</p>
-        <a href="games/tetris-clone.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: Word Guess -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">🎯</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Word Guess</h3>
-        <p class="text-gray-300 text-center mb-4">Hangman-style word guessing game!</p>
-        <a href="games/word-guess.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: Minesweeper -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">💣</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Minesweeper</h3>
-        <p class="text-gray-300 text-center mb-4">Classic minesweeper with neon theme!</p>
-        <a href="games/minesweeper.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: 2048 Game -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">🔢</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">2048 Game</h3>
-        <p class="text-gray-300 text-center mb-4">Number sliding puzzle - reach 2048!</p>
-        <a href="games/2048-game.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: Breakout -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">🧱</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Breakout</h3>
-        <p class="text-gray-300 text-center mb-4">Classic brick breaker game!</p>
-        <a href="games/breakout.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: Simon Says -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">🎵</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Simon Says</h3>
-        <p class="text-gray-300 text-center mb-4">Memory sequence game with sounds!</p>
-        <a href="games/simon-says.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
-      <!-- Game Card: Sudoku -->
-      <div class="card-hover bg-gray-800/80 rounded-2xl p-6 flex flex-col items-center shadow-lg transition group">
-        <div class="text-5xl mb-4">🧩</div>
-        <h3 class="text-xl font-bold text-yellow-200 mb-2">Sudoku</h3>
-        <p class="text-gray-300 text-center mb-4">Number puzzle with neon styling!</p>
-        <a href="games/sudoku.html" class="btn-cta px-6 py-2 text-base mt-auto">Play Now</a>
-      </div>
+      <!-- Games will be populated by JavaScript -->
     </div>
+    
     <!-- Pagination Controls -->
     <div class="flex justify-center items-center space-x-4 mt-8">
       <button id="prevPage" class="btn-cta px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
@@ -360,6 +354,8 @@
 
     let currentPage = 1;
     let gamesPerPage = 10;
+    let currentWallpaper = 0;
+    const wallpapers = ['wallpaper-1', 'wallpaper-2', 'wallpaper-3'];
 
     function createGameCard(game) {
       const buttonText = game.available ? 'Play Now' : 'Coming Soon';
@@ -405,45 +401,66 @@
       document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
     }
 
+    // Wallpaper cycling function
+    function cycleWallpaper() {
+      // Only on desktop
+      if (window.innerWidth > 1024) {
+        // Hide current wallpaper
+        document.getElementById(wallpapers[currentWallpaper]).classList.remove('active');
+        
+        // Move to next wallpaper
+        currentWallpaper = (currentWallpaper + 1) % wallpapers.length;
+        
+        // Show next wallpaper
+        document.getElementById(wallpapers[currentWallpaper]).classList.add('active');
+      }
+    }
+
+    // Initialize wallpaper cycling
+    function initWallpapers() {
+      if (window.innerWidth > 1024) {
+        // Start with first wallpaper
+        document.getElementById(wallpapers[0]).classList.add('active');
+        
+        // Cycle wallpapers every 8 seconds
+        setInterval(cycleWallpaper, 8000);
+      }
+    }
+
     // Fade-in animation for games section
     document.addEventListener('DOMContentLoaded', function () {
       setTimeout(function () {
         document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
       }, 200);
 
+      // Initialize wallpapers
+      initWallpapers();
+
       // Header/Footer includes
-      fetch('header.html')
+      fetch('pages/header.html')
         .then(r => {
           if (!r.ok) throw new Error('Failed to load header');
           return r.text();
         })
         .then(html => {
           document.getElementById('header-placeholder').innerHTML = html;
-          // Load header script after header HTML is inserted
-          const headerScript = document.createElement('script');
-          headerScript.src = 'assets/js/header.js';
-          document.body.appendChild(headerScript);
         })
         .catch(err => {
           console.error('Error loading header:', err);
           document.getElementById('header-placeholder').innerHTML = '<div class="text-red-500">Error loading header</div>';
         });
 
-        fetch('footer.html')
+        fetch('pages/footer.html')
         .then(r => {
-          if (!r.ok) throw new Error('Failed to load header');
+          if (!r.ok) throw new Error('Failed to load footer');
           return r.text();
         })
         .then(html => {
           document.getElementById('footer-placeholder').innerHTML = html;
-          // Load header script after header HTML is inserted
-          const headerScript = document.createElement('script');
-          headerScript.src = 'assets/js/footer.js';
-          document.body.appendChild(headerScript);
         })
         .catch(err => {
-          console.error('Error loading header:', err);
-          document.getElementById('footer-placeholder').innerHTML = '<div class="text-red-500">Error loading header</div>';
+          console.error('Error loading footer:', err);
+          document.getElementById('footer-placeholder').innerHTML = '<div class="text-red-500">Error loading footer</div>';
         });
 
       // Initialize games grid and pagination
